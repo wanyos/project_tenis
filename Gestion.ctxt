@@ -1,0 +1,25 @@
+#BlueJ class context
+comment0.params=
+comment0.target=Gestion()
+comment1.params=
+comment1.target=GraficaPrincipal\ getGPrincipal()
+comment1.text=\r\n\ Devuelve\ el\ objeto\ gr\u00E1fica\ principal\ que\ esta\ inicializado\ en\ el\ constructor\r\n\ @return\ objeto\ gr\u00E1fica\ principal\r\n
+comment2.params=datos\ titulo
+comment2.target=int\ menuOpciones(java.lang.String[],\ java.lang.String)
+comment2.text=\r\n\ Menu\ principal\ de\ todas\ las\ distintas\ gestiones.\r\n\ @param\ array\ con\ las\ opciones\ que\ tiene\ el\ menu.\ Titulo\ del\ menu\r\n\ @return\ opci\u00F3n\ que\ elige\ el\ usuario\r\n
+comment3.params=datos_imprimir
+comment3.target=java.util.List\ leerArrayDatos(java.lang.String[])
+comment3.text=\r\n\ Pregunta\ al\ usuario\ la\ lista\ de\ datos\ que\ venga\ en\ el\ array.\ Cada\ dato\ lo\ manda\ a\ validar\ por\ separado,\ dependiendo\r\n\ del\ valor\ que\ se\ espere,\ ya\ sea\ un\ telefono\ o\ un\ nombre\ por\ ejemplo.\r\n\ @param\ array\ de\ datos\ a\ leer\r\n\ @retur\ lista\ con\ los\ datos\ leidos\r\n
+comment4.params=
+comment4.target=boolean\ preguntarSiRepetir()
+comment4.text=\r\n\ Pregunta\ si\ repetir\ la\ misma\ accion\ o\ abortar\ \r\n\ @return\ true\ si\ repetir\r\n
+comment5.params=
+comment5.target=Jugador\ pedirJugador()
+comment5.text=\r\nPide\ a\ la\ base\ de\ datos\ un\ jugador\ por\ nombre\ y\ apellidos\ que\ ingresa\ el\ usuario\r\nSi\ el\ jugador\ es\ err\u00F3neo\ o\ no\ existe,\ el\ jugador\ sera\ null.\r\n
+comment6.params=
+comment6.target=java.util.GregorianCalendar\ pedirFecha()
+comment6.text=\r\n\ Pedir\ el\ d\u00EDa,\ mes\ y\ a\u00F1o\ \r\n\ @return\ fecha\ del\ d\u00EDa\ jugado\r\n
+comment7.params=dia\ mes\ anyo
+comment7.target=boolean\ validarFecha(int,\ int,\ int)
+comment7.text=\r\n\ Valida\ el\ dia,\ mes\ y\ a\u00F1o\ escrito\ por\ el\ usuario.\ Evalua\ la\ fecha\ despues\ de\ introducir\ todos\ los\ valores.\ Si\ alguno\ no\ es\ correcto\r\n\ se\ pedira\ repetir\ los\ tres\ campos\ de\ nuevo.\r\n\ @param\ enteros\ de\ dia,\ mes\ y\ a\u00F1o\r\n\ @return\ valor\ true\ si\ la\ fecha\ es\ correcta\r\n
+numComments=8

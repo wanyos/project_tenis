@@ -1,0 +1,8 @@
+#BlueJ class context
+comment0.params=
+comment0.target=Archivo()
+comment1.params=datos
+comment1.target=boolean\ salidaDatos(java.util.List)
+comment2.params=
+comment2.target=java.util.List\ entradaDatos()
+numComments=3

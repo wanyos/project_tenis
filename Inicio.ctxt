@@ -1,0 +1,14 @@
+#BlueJ class context
+comment0.params=args
+comment0.target=void\ main(java.lang.String[])
+comment1.params=
+comment1.target=BaseDatos\ getBaseDatos()
+comment1.text=\r\n\ Desde\ este\ m\u00E9todo\ se\ devuelve\ el\ objeto\ base_datos.\ Solo\ se\ inicia\ una\ vez\ al\ arrancar\ la\ aplicaci\u00F3n\r\n\ Se\ mantiene\ un\ solo\ objeto\ para\ los\ cambios\ se\ sufriran\ las\ listas\ de\ esta\ clase\ y\ que\ son\ esenciales\ \r\n\ en\ la\ aplicaci\u00F3n.\r\n\ @return\ objeto\ base_datos\r\n
+comment2.params=
+comment2.target=Inicio()
+comment3.params=
+comment3.target=void\ menuPrincipal()
+comment3.text=\r\n\ Menu\ principal\ de\ la\ aplicacion\r\n
+comment4.params=
+comment4.target=void\ cargarDatos()
+numComments=5

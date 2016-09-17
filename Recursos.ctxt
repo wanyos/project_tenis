@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.params=
+comment0.target=Recursos()
+comment1.params=fecha
+comment1.target=java.lang.String\ convertirFecha(java.util.GregorianCalendar)
+comment1.text=\r\n\ Pasar\ una\ fecha\ de\ GregorianCalendar\ a\ String\ para\ imprimirla\r\n\ @param\ GregorianCalendar\ \r\n\ @return\ Cadena\ formateada\r\n
+comment2.params=cadena
+comment2.target=int\ pasarCadenaInt(java.lang.String)
+comment2.text=\r\n\ Convierte\ una\ cadena\ en\ entero,\ teniendo\ en\ cuenta\ que\ lo\ que\ viene\ en\ la\ cadena\ es\ un\ \r\n\ valor\ entero\r\n\ @param\ cadena\ a\ pasar\ a\ entero\r\n\ @return\ valor\ entero\ leido\ de\ la\ cadena\r\n
+numComments=3

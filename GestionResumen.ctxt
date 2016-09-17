@@ -1,0 +1,15 @@
+#BlueJ class context
+comment0.params=
+comment0.target=GestionResumen()
+comment1.params=
+comment1.target=void\ menuGestionResumen()
+comment1.text=\r\n\ Menu\ principal\ de\ la\ gesti\u00F3n\ del\ resumen\ de\ datos\r\n
+comment2.params=
+comment2.target=void\ datosDia()
+comment3.params=
+comment3.target=void\ datosMes()
+comment4.params=
+comment4.target=void\ datosAnyo()
+comment5.params=
+comment5.target=void\ datosJugador()
+numComments=6
