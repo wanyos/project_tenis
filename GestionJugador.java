@@ -101,8 +101,9 @@ public class GestionJugador extends Gestion
     
     
     /**
-     * Nos jugador que compra el bono que sera comprobado en la base de datos que existe.
+     * Nos pide jugador que compra el bono que sera comprobado en la base de datos de jugadores.
      * Si todo correcto nos pide las horas que tendra el bono y su número. Le agrega el bono al jugador.
+     * Cuando un jugador compra un bono de x horas, en su contador se multiplica por 2 ese valor.
      */
     private void crearBonoJugador ()
     {
@@ -129,7 +130,7 @@ public class GestionJugador extends Gestion
     
     /**
      * Pide el jugador que quiere borrar uno de sus bonos. Si el jugador correcto nos pide el bono que quiere borrar mostrando en pantalla
-     * sus bono. Le tenemos que dar el id del bono que queremos borrar.
+     * sus bonos. Le tenemos que dar el id del bono y su número.
      */
     private void eliminarBonoJugador ()
     {
@@ -142,7 +143,7 @@ public class GestionJugador extends Gestion
             datos_leidos.clear();
             datos_leidos = leerArrayDatos (datos);
             
-              if (datos_leidos.size()<2){
+              if (datos_leidos.size() < 2){
                     getGPrincipal().pausaSalir (" Accion cancelada...");   
               } else {
               Bono bono = jugador.buscarBono (datos_leidos.get(0), datos_leidos.get(1));
@@ -178,11 +179,11 @@ public class GestionJugador extends Gestion
     
     
     /**
-     * Busca todos los bonos que correspondan con el mismo id que escribamos. Cada jugador tiene su lista de bono y los id
-     * de los diferentes bonos pueden coincidir
+     * Busca un bono por su número. Este número es único de cada bono, los id de los bonos de cada jugador seran iguales.
      */
     private void buscarBono ()
     {
+      getGPrincipal().imprimirMensaje ("  Buscar un bono por su numero...");
       String num_bono = getGPrincipal().leerDatoUsuario ("Escriba el numero de bono a buscar");
       Bono bono = Inicio.getBaseDatos().buscarBonoIdNum (num_bono);
       
@@ -200,7 +201,14 @@ public class GestionJugador extends Gestion
      */
     private void buscarJugador ()
     {
+        getGPrincipal().imprimirMensaje ("  Buscar jugador por nombre y apellido...");
+        Jugador jugador = pedirJugador ();
         
+        if (jugador != null) {
+            getGPrincipal().pintarObjeto (jugador);
+        } else {
+           getGPrincipal().pausaSalir (" El jugador no existe o no ha sido encontrado...");    
+        }
     }
     
     
