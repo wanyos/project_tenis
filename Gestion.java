@@ -2,6 +2,7 @@
 import java.util.List;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.Calendar;
 
 /**
  * Clase encargada de toda la gestion lógica de la aplicación
@@ -128,7 +129,7 @@ public abstract class Gestion
         boolean correcto = validarFecha (dia, mes, anyo);
         
         if (correcto) {
-          fecha_jugado = new GregorianCalendar (anyo, mes-1, dia); 
+          fecha_jugado = new GregorianCalendar (anyo, mes-1, dia);
         }
         return fecha_jugado;
     }
@@ -140,7 +141,7 @@ public abstract class Gestion
      * @param enteros de dia, mes y año
      * @return valor true si la fecha es correcta
      */
-    private boolean validarFecha (int dia, int mes, int anyo) 
+    protected boolean validarFecha (int dia, int mes, int anyo) 
     {
         boolean correcto = false, repetir = false;
         

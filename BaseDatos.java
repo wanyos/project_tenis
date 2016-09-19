@@ -108,22 +108,29 @@ public class BaseDatos implements Serializable
      * @param dia, mes y año que se quiere buscar el resumen de todos los jugados
      * @return lista con los datos
      */
-    public List<DiaJugado> resumenListaJugado (int dia, int mes, int anyo)
+    public List<DiaJugado> resumenListaJugado (int dia, int mes, int anyo, Jugador jugador)
     {
         List<DiaJugado> lista_resumen = new ArrayList<DiaJugado>();
         
          for (DiaJugado aux: lista_dia_jugado){
-        if (dia > 0 && mes > 0 && anyo > 0){
+        if (dia > 0 && mes > 0 && anyo > 0 && jugador == null){
                 if (aux.getDiaJugado() == dia && aux.getMesJugado() == mes && aux.getAnyoJugado() == anyo){
                    lista_resumen.add (aux);
                 }
-          } else if (dia <= 0 && mes > 0 && anyo > 0) {
+                
+          } else if (dia <= 0 && mes > 0 && anyo > 0 && jugador == null) {
                if (aux.getMesJugado() == mes && aux.getAnyoJugado() == anyo){
                    lista_resumen.add (aux);
                 }
-            } else if (dia <= 0 && mes <= 0 && anyo > 0) {
+                
+            } else if (dia <= 0 && mes <= 0 && anyo > 0 && jugador == null) {
                 if (aux.getAnyoJugado() == anyo){
                    lista_resumen.add (aux);
+                }
+                
+            } else if (dia <= 0 && mes > 0 && anyo > 0 && jugador != null) {
+                if ((aux.getJugador1().equals(jugador) || aux.getJugador2().equals(jugador)) && aux.getMesJugado() == mes && aux.getAnyoJugado() == anyo) {
+                   lista_resumen.add (aux); 
                 }
             }
         }
@@ -143,7 +150,6 @@ public class BaseDatos implements Serializable
         fecha_hoy = new GregorianCalendar ();
         
         for (DiaJugado aux: lista_dia_jugado) {
-            
             if (buscar_antes_hoy) {
                 if (aux.getFechaJugado().before (fecha_hoy)) {
                     lista_resumen.add (aux);

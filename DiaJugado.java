@@ -60,7 +60,7 @@ public class DiaJugado
     public int getMesJugado ()
     {
         int mes = fecha_jugado.get (Calendar.MONTH);
-        return mes;
+        return mes+1;
     }
     
     
