@@ -95,7 +95,8 @@ public class Bono
     
     public String toString ()
     {
-        return " Id: "+getIdString()+" -- Fecha alta: "+Recursos.convertirFecha(getFechaAlta())+"\n Horas bono: "+getHoraBono()+" -- Nº-Bono: "+getNumBono()+"\n\n";
+        return " Id: "+getIdString()+" -- Fecha alta: "+Recursos.convertirFecha(getFechaAlta())+"\n Horas bono: "+getHoraBono()+
+                     " -- Nº-Bono: "+getNumBono()+" -- Numero jugador: "+getNumJugador()+"\n\n";
     }
     
     

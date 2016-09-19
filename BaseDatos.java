@@ -183,10 +183,10 @@ public class BaseDatos implements Serializable
     /**
      * Devuelve el bono de un jugador. Se busca en la lista personal de cada jugador. En la primera coincidencia
      * devuelve el bono encontrado. Para saber a que jugador pertenece nos fijamos en el número del socio del jugador
-     * @param id del bono a buscar
-     * @return bono encontrado por ese id si es que existe
+     * @param id del bono a buscar o número del bono
+     * @return bono encontrado por ese id o número de bono si es que existe
      */
-    public Bono buscarBonoId (String num_bono)
+    public Bono buscarBonoIdNum (String valor)
     {
         Bono bono = null;
         boolean encontrado = false;
@@ -194,8 +194,8 @@ public class BaseDatos implements Serializable
         
         while (it.hasNext() && !encontrado) {
           Jugador jugador = (Jugador) it.next();  
-          Bono aux = jugador.buscarBono (null, num_bono);
-            if (bono != null) {
+          Bono aux = jugador.buscarBono (null, valor);
+            if (aux != null) {
               encontrado = true;  
               bono = aux;  
             }

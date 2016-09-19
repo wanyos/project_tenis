@@ -183,11 +183,10 @@ public class GestionJugador extends Gestion
      */
     private void buscarBono ()
     {
-      Bono bono = null;
       String num_bono = getGPrincipal().leerDatoUsuario ("Escriba el numero de bono a buscar");
-    
+      Bono bono = Inicio.getBaseDatos().buscarBonoIdNum (num_bono);
+      
       if (bono != null) {
-           bono = Inicio.getBaseDatos().buscarBonoId (num_bono);
            getGPrincipal().pintarObjeto (bono);
            getGPrincipal().pausaSalir (" Fin de los datos..."); 
         } else {

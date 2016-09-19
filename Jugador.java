@@ -155,15 +155,12 @@ public class Jugador
         
         while (it.hasNext() && !encontrado) {
           Bono aux = (Bono) it.next();
-           if (num_bono != null && aux.getIdString().equals(id) && aux.getNumBono().equals(num_bono)){
+           if (id == null && aux.getNumBono().equals(num_bono)){
               bono = aux;
               encontrado = true;
-            } else if (aux.getIdString().equals(id)) {
-                 bono = aux;
-                 encontrado = true;
-            } else if (aux.getNumBono().equals(num_bono)) {
-                bono = aux;
-                encontrado = true;
+            } else if (num_bono == null && aux.getIdString().equals(id)) {
+               bono = aux;
+               encontrado = true;
             }
         }
         return bono;
