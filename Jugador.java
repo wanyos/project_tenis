@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
+import java.io.Serializable;
 
 /**
  * Clase encargada de llevar toda la gestion de un jugador. Existe una lista estatica donde se guardan los bonos de un jugador
@@ -11,7 +12,7 @@ import java.util.Iterator;
  * @version (1.0  25/08/2016)
  */
 
-public class Jugador
+public class Jugador implements Serializable
 {
     private List<Bono> lista_bono = new ArrayList<Bono>();
     

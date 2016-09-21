@@ -40,6 +40,7 @@ public class Inicio
     public Inicio()
     {
         grafica_principal = new GraficaPrincipal ();
+        this.base_datos.getDatosSistema ();
         menuPrincipal ();
     }
     
@@ -49,7 +50,7 @@ public class Inicio
      */
     private void menuPrincipal ()
     {
-        cargarDatos ();
+        //cargarDatos ();
         int opcion = 0;
           grafica_principal.cabeceraInicio ();
         do {
@@ -62,6 +63,12 @@ public class Inicio
             }
             
             if (opcion == 115 || opcion == 83){
+              boolean exportado = this.base_datos.setDatosSistema ();
+              if (exportado) {
+                  grafica_principal.imprimirMensaje ("  Datos exportados a archivo...");
+                } else {
+                  grafica_principal.imprimirMensaje (" !!!Error datos no exportados a archivo..."); 
+                }
 			  break;
 		  }
         } while (opcion >= 1 || opcion < 3);
@@ -72,11 +79,11 @@ public class Inicio
     {
         Jugador juanjo = new Jugador ("juanjo", "romero", "52950980N", "615615529", "12568");
         juanjo.comprarBono (10, "123456", "12568");
-         Inicio.getBaseDatos().setJugador (juanjo);
+        Inicio.getBaseDatos().setJugador (juanjo);
          
-         Jugador manolo = new Jugador ("manolo", "vega", "51930680N", "612617529", "12570");
-         manolo.comprarBono (10, "123", "12590");
-         Inicio.getBaseDatos().setJugador (manolo);
+        Jugador manolo = new Jugador ("manolo", "vega", "51930680N", "612617529", "12570");
+        manolo.comprarBono (10, "123", "12590");
+        Inicio.getBaseDatos().setJugador (manolo); 
     }
     
    

@@ -1,5 +1,6 @@
 
 import java.util.GregorianCalendar;
+import java.io.Serializable;
 
 /**
  * Clase dedicada a crear un bono para un jugador
@@ -9,7 +10,7 @@ import java.util.GregorianCalendar;
  */
 
 
-public class Bono
+public class Bono implements Serializable
 {
     
     private GregorianCalendar fecha_alta;

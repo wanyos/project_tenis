@@ -83,8 +83,6 @@ public class GestionResumen extends Gestion
           getGPrincipal().pintarLista (Inicio.getBaseDatos().resumenListaJugado (0, mes, anyo, jugador)); 
           getGPrincipal().pausaSalir (" Fin de los datos...");
         }
-        
-       
     }
     
     

@@ -1,8 +1,10 @@
 #BlueJ class context
 comment0.params=
 comment0.target=Archivo()
-comment1.params=datos
-comment1.target=boolean\ salidaDatos(java.util.List)
+comment1.params=datos_sistema
+comment1.target=boolean\ exportarDatos(java.util.Collection)
+comment1.text=\r\n\ Salida\ de\ datos\ al\ archivo\r\n
 comment2.params=
-comment2.target=java.util.List\ entradaDatos()
+comment2.target=java.util.Collection\ importarDatos()
+comment2.text=\r\n\ Entrada\ de\ datos\ al\ sistema\r\n
 numComments=3

@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.io.Serializable;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
+import java.util.Collection;
 
 
 /**
@@ -21,6 +22,7 @@ public class BaseDatos implements Serializable
     private Set<Jugador> lista_jugador;
     private List<DiaJugado> lista_dia_jugado;
     private GregorianCalendar fecha_hoy;
+    private Collection<Object> datos_sistema;
    
     
     
@@ -30,6 +32,52 @@ public class BaseDatos implements Serializable
        lista_dia_jugado = new ArrayList<DiaJugado>();
     }
 
+    
+    /**
+     *Guarda los datos del sistema en un archivo persistente 
+     */
+    public boolean setDatosSistema ()
+    {
+      boolean exportado = false;
+      datos_sistema = new ArrayList<Object>();
+      datos_sistema.add (lista_jugador);
+      datos_sistema.add (lista_dia_jugado);
+      
+      exportado = Archivo.exportarDatos (datos_sistema);
+      
+      return exportado;
+    }
+    
+    
+    /**
+     * Importa los datos del archivo persistente al sistema. Importara la lista de jugador y la lista dia jugado
+     */
+    public boolean getDatosSistema ()
+    {
+       boolean importar = false;
+       datos_sistema = new ArrayList<Object>();
+       datos_sistema = Archivo.importarDatos ();
+       
+       if (datos_sistema != null) {
+           for (Object lista_aux: datos_sistema) {
+               
+              if (lista_aux instanceof HashSet) {
+                   for (Jugador jug: (HashSet<Jugador>) lista_aux) {
+                       lista_jugador.add (jug);
+                    }
+                    
+                } else if (lista_aux instanceof ArrayList) {
+                    for (DiaJugado dia_jug: (ArrayList<DiaJugado>) lista_aux) {
+                        lista_dia_jugado.add (dia_jug);
+                    }
+                }
+            }
+           importar = true;
+        }
+       
+       return importar;
+    }
+    
     
     /**
      * Busca un jugador por su nombre y apellidos

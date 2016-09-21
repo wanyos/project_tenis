@@ -1,6 +1,7 @@
 
 import java.util.GregorianCalendar;
 import java.util.Calendar;
+import java.io.Serializable;
 
 /**
  * Clase que describe un dia jugado por uno o dos jugadores del sistema
@@ -10,7 +11,7 @@ import java.util.Calendar;
  */
 
 
-public class DiaJugado
+public class DiaJugado implements Serializable
 {
 
     private GregorianCalendar fecha_jugado;
