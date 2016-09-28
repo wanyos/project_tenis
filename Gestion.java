@@ -101,17 +101,30 @@ public abstract class Gestion
     
     
     /**
-     *Pide a la base de datos un jugador por nombre y apellidos que ingresa el usuario
-     *Si el jugador es erróneo o no existe, el jugador sera null.
+     * Pide a la base de datos un jugador por nombre y apellidos que ingresa el usuario
+     * @return Si el jugador es erróneo o no existe, el jugador sera null.
      */
-    protected Jugador pedirJugador ()
+    protected Jugador pedirJugadorNombre ()
     {
         datos_leidos = new ArrayList<String>();
         Jugador jugador = null;
         String [] datos = {"Nombre jugador", "Apellido jugador"};
         datos_leidos.clear();
         datos_leidos = leerArrayDatos (datos);  
-        jugador = Inicio.getBaseDatos().buscaJugador (datos_leidos.get(0), datos_leidos.get(1));
+        jugador = Inicio.getBaseDatos().buscaJugador (datos_leidos.get(0), datos_leidos.get(1), null);
+        return jugador;
+    }
+    
+    
+    /**
+     * Pide a la base de datos un jugador por su numero de socio.
+     * @return jugador si existe si no devuelve null
+     */
+     protected Jugador pedirJugadorNumero ()
+    {
+        Jugador jugador = null;
+        String num_jugador = g_principal.leerDatoUsuario ("Numero jugador");
+        jugador = Inicio.getBaseDatos().buscaJugador (null, null, num_jugador);
         return jugador;
     }
     
@@ -157,6 +170,8 @@ public abstract class Gestion
         }
        return correcto; 
     }
+    
+    
     
     
     

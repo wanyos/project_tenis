@@ -52,6 +52,17 @@ public abstract class Recursos
     }
     
     
+    /**
+     *  Devuelve el total de dias del mes de la fecha del parámetro
+     *  @return dias que tiene un mes
+     */
+    public static int getNumeroDiasMes (GregorianCalendar fecha_jugado)
+    {
+        int dias_del_mes = 0;
+        dias_del_mes = fecha_jugado.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+        return dias_del_mes;
+    }
+    
     
     
     

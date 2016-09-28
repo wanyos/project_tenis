@@ -1,10 +1,8 @@
 #BlueJ class context
 comment0.params=
 comment0.target=Archivo()
-comment1.params=datos_sistema
-comment1.target=boolean\ exportarDatos(java.util.Collection)
-comment1.text=\r\n\ Salida\ de\ datos\ al\ archivo\r\n
-comment2.params=
-comment2.target=java.util.Collection\ importarDatos()
-comment2.text=\r\n\ Entrada\ de\ datos\ al\ sistema\r\n
+comment1.params=lista_jugador\ lista_dia_jugado\ nombre_archivo
+comment1.target=boolean\ exportarColeccionDatos(java.util.Set,\ java.util.List,\ java.lang.String)
+comment2.params=nombre_archivo
+comment2.target=java.lang.Object\ importarObjeto(java.lang.String)
 numComments=3

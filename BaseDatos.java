@@ -22,8 +22,6 @@ public class BaseDatos implements Serializable
     private Set<Jugador> lista_jugador;
     private List<DiaJugado> lista_dia_jugado;
     private GregorianCalendar fecha_hoy;
-    private Collection<Object> datos_sistema;
-   
     
     
     public BaseDatos()
@@ -34,57 +32,145 @@ public class BaseDatos implements Serializable
 
     
     /**
-     *Guarda los datos del sistema en un archivo persistente 
+     * Se guardan en la lista todos los jugadores con el contador en negativo.
+     * @return lista de jugadores con el contador en negativo.
      */
-    public boolean setDatosSistema ()
+    public Set<Jugador> listaJugadorContadorNegativo ()
+    {
+       Set<Jugador> lista_jugador_negativo = new HashSet<Jugador>(); 
+       
+       for (Jugador jugador_aux: lista_jugador) {
+           if (jugador_aux.getContador() <= 0) {
+               lista_jugador_negativo.add (jugador_aux);
+            }
+        }
+       
+       return lista_jugador_negativo;
+    }
+    
+    
+    /**
+     * Lista de bonos activos del sistema.
+     * @return lista de todos los bonos activos en el momento de la consulta
+     */
+    public List<Bono> listaBonoActivos ()
+    {
+        List<Bono> lista_bono_activo = new ArrayList<Bono>();
+        
+        for (Jugador jugador_aux: lista_jugador) {
+            for (Bono bono_aux: jugador_aux.getListaBono()) {
+              if (bono_aux.getHoraBono() > 0) {
+                  lista_bono_activo.add (bono_aux);
+                }
+            }
+        }
+        
+        return lista_bono_activo;
+    }
+    
+    
+    public boolean exportListaJugador ()
+    {
+        boolean exportado = false;
+        exportado = Archivo.exportarColeccionDatos (this.lista_jugador, null, "lista_jugador.txt");
+        return exportado;
+    }
+    
+    
+     public boolean exportListaDiaJugado ()
+    {
+        boolean exportado = false;
+        exportado = Archivo.exportarColeccionDatos (null, this.lista_dia_jugado, "lista_dia_jugado.txt");
+        return exportado;
+    }
+    
+    
+    public boolean importarListaJugador ()
+    {
+        boolean importado = false;
+        Object importar_objeto = null;
+        
+        try{
+           importar_objeto = Archivo.importarObjeto ("lista_jugador.txt");
+               if (importar_objeto instanceof HashSet) {
+                lista_jugador =  (Set<Jugador>) importar_objeto;
+                }
+        } catch (Exception e) {
+            
+        }
+        return importado; 
+    }
+    
+    
+     public boolean importarListaDiaJugado ()
+    {
+        boolean importado = false;
+        Object importar_objeto = null; 
+        importar_objeto = Archivo.importarObjeto ("lista_dia_jugado.txt");
+        
+        if (importar_objeto instanceof ArrayList) {
+            lista_dia_jugado = (List<DiaJugado>) importar_objeto;
+        }
+        return importado; 
+    }
+    
+    
+    
+    /*
+     * 
+     *Guarda los datos del sistema en un archivo persistente 
+     *
+    public boolean exportDatosSistema ()
     {
       boolean exportado = false;
-      datos_sistema = new ArrayList<Object>();
-      datos_sistema.add (lista_jugador);
-      datos_sistema.add (lista_dia_jugado);
-      
-      exportado = Archivo.exportarDatos (datos_sistema);
+     
+      Collection<Object> datos_exportar = new ArrayList<Object>();
+      datos_exportar.add (lista_jugador);
+      datos_exportar.add (lista_dia_jugado);
+     
+      exportado = Archivo.exportarDatos (datos_exportar);
       
       return exportado;
     }
     
     
-    /**
-     * Importa los datos del archivo persistente al sistema. Importara la lista de jugador y la lista dia jugado
-     */
-    public boolean getDatosSistema ()
+    
+     /**
+      * 
+      *Importa los datos del archivo persistente al sistema. Importara la lista de jugador y la lista dia jugado
+     
+    public boolean importDatosSistema ()
     {
        boolean importar = false;
-       datos_sistema = new ArrayList<Object>();
-       datos_sistema = Archivo.importarDatos ();
+       Collection<Object> datos_importados = new ArrayList<Object>();
+       datos_importados = Archivo.importarDatos ();
        
-       if (datos_sistema != null) {
-           for (Object lista_aux: datos_sistema) {
+       if (datos_importados != null) {
+           for (Object obj: datos_importados) {
                
-              if (lista_aux instanceof HashSet) {
-                   for (Jugador jug: (HashSet<Jugador>) lista_aux) {
+              if (obj instanceof HashSet) {
+                   for (Jugador jug: (HashSet<Jugador>) obj) {
                        lista_jugador.add (jug);
                     }
                     
-                } else if (lista_aux instanceof ArrayList) {
-                    for (DiaJugado dia_jug: (ArrayList<DiaJugado>) lista_aux) {
+                } else if (obj instanceof ArrayList) {
+                    for (DiaJugado dia_jug: (ArrayList<DiaJugado>) obj) {
                         lista_dia_jugado.add (dia_jug);
                     }
                 }
             }
            importar = true;
         }
-       
        return importar;
     }
-    
+    */
     
     /**
-     * Busca un jugador por su nombre y apellidos
+     * Busca un jugador por su nombre y apellidos o por su número de socio.
      * @param nombre y apellido del jugador que debe buscar
      * @return si encuentra un jugador con ese nombre y apellido
      */
-   public Jugador buscaJugador (String nombre, String apellido)
+   public Jugador buscaJugador (String nombre, String apellido, String num_socio)
     {
        Jugador jugador = null;
        boolean encontrado = false;
@@ -92,7 +178,10 @@ public class BaseDatos implements Serializable
        
        while (it.hasNext() && !encontrado) {
            Jugador aux = (Jugador) it.next();
-            if (aux.getNombre().equals(nombre) && (aux.getApellido().equals(apellido))) {
+            if (num_socio == null && aux.getNombre().equals(nombre) && (aux.getApellido().equals(apellido))) {
+                jugador = aux;
+                encontrado = true;
+            } else if (nombre == null && apellido == null && aux.getNumSocio().equals(num_socio)) {
                 jugador = aux;
                 encontrado = true;
             }
@@ -119,7 +208,7 @@ public class BaseDatos implements Serializable
     }
     
     
-    public List<DiaJugado> getDiaJugado ()
+    public List<DiaJugado> getListaDiaJugado ()
     {
         return this.lista_dia_jugado;
     }
@@ -152,7 +241,7 @@ public class BaseDatos implements Serializable
     /**
      * Devuelve una lista con todos los dias jugados ya sea en un día, mes o año. Si buscamos por
      * un día, debe de traer el mes y el año. Si lo que queremos es el resumen de un mes, los parámetros
-     * traeran solo el mes y año, y lo mismo para un año
+     * traeran solo el mes y año, y lo mismo para un año. Otra opción es buscar los dias jugados por un jugador en un mes y año concreto.
      * @param dia, mes y año que se quiere buscar el resumen de todos los jugados
      * @return lista con los datos
      */
@@ -180,6 +269,11 @@ public class BaseDatos implements Serializable
                 if ((aux.getJugador1().equals(jugador) || aux.getJugador2().equals(jugador)) && aux.getMesJugado() == mes && aux.getAnyoJugado() == anyo) {
                    lista_resumen.add (aux); 
                 }
+                
+            } else if (dia <= 0 && mes <= 0 && anyo > 0 && jugador != null) {
+                if ((aux.getJugador1().equals(jugador) || aux.getJugador2().equals(jugador)) && aux.getAnyoJugado() == anyo) {
+                    lista_resumen.add (aux);
+                }
             }
         }
         return lista_resumen;
@@ -187,9 +281,8 @@ public class BaseDatos implements Serializable
     
     
     /**
-     * Recibe una fecha de referencia, dependiendo del valor boolean de cada parámetro se buscaran todos los partidos antes o despues de la
-     * fecha actual.
-     * @param fecha de referencia para buscar todos los que esten antes de esa fecha o despues de esa fecha, dependiendo de los bolean
+     * Dependiendo del valor boolean de cada parámetro se buscaran todos los partidos antes o despues de la fecha actual.
+     * @param bolean true o false para buscar todos los dias jugados antes o despues de la fecha actual
      * @return lista con los datos recogidos
      */
     public List<DiaJugado> resumenListaJugado (boolean buscar_antes_hoy, boolean buscar_despues_hoy)
@@ -235,12 +328,11 @@ public class BaseDatos implements Serializable
     
     
     /**
-     * Devuelve el bono de un jugador. Se busca en la lista personal de cada jugador. En la primera coincidencia
-     * devuelve el bono encontrado. Para saber a que jugador pertenece nos fijamos en el número del socio del jugador
+     * Devuelve el bono de un jugador. Se busca en la lista de bonos del jugador por el número de bono, que sera un número único de cada bono.
      * @param id del bono a buscar o número del bono
      * @return bono encontrado por ese id o número de bono si es que existe
      */
-    public Bono buscarBonoIdNum (String valor)
+    public Bono buscarBonoNum (String num_bono)
     {
         Bono bono = null;
         boolean encontrado = false;
@@ -248,7 +340,7 @@ public class BaseDatos implements Serializable
         
         while (it.hasNext() && !encontrado) {
           Jugador jugador = (Jugador) it.next();  
-          Bono aux = jugador.buscarBono (null, valor);
+          Bono aux = jugador.buscarBono (null, num_bono);
             if (aux != null) {
               encontrado = true;  
               bono = aux;  

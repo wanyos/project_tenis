@@ -2,7 +2,6 @@
 import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
-//import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.Iterator;
 
@@ -57,9 +56,7 @@ public class GraficaPrincipal
     {
        System.out.println ();
        System.out.println (" =================================================================================================");
-       System.out.println (" ===                                                                                           ===");
        System.out.println (" ===                            APLICACION DATOS TENIS                                         ===");
-       System.out.println (" ===                                                                                           ===");
        System.out.println (" =================================================================================================");
        System.out.println (); 
     }
@@ -112,7 +109,6 @@ public class GraficaPrincipal
 		} catch (Exception e){
 			valor_leido = (int) cadena.charAt(0);
 		}
-		
 		return valor_leido;
 	} 
 	 
@@ -195,7 +191,7 @@ public class GraficaPrincipal
 	 * Lee la cadena ingresada por el usuario y la devuelve
 	 * @return - cadena leida
 	 */
-	public String leerString ()
+	private String leerString ()
 	{
 		sc = new Scanner (System.in);
 		String leido = null;
@@ -208,7 +204,7 @@ public class GraficaPrincipal
 	 * Lee una cadena y la pasa a entero. Si lo que lee es una letra, devuelve su codigo ascii
 	 * @return - cadena pasada a entero leida por Scanner o su codigo ascii
 	 */
-	public int leerInt ()
+	private int leerInt ()
 	{
 		sc = new Scanner (System.in);
 		int valor_leido = 0;

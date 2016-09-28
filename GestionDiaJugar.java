@@ -52,7 +52,7 @@ public class GestionDiaJugar extends Gestion
        String nombre_anonimo, apellido_anonimo;
        
        getGPrincipal().imprimirMensaje ("Seleccionar jugador1...");
-       jugador1 = pedirJugador ();
+       jugador1 = pedirJugadorNombre ();
         if (jugador1 != null) {
            cantHoraJ1 = descontarHoraJugador (jugador1);
         } else {
@@ -60,7 +60,7 @@ public class GestionDiaJugar extends Gestion
         }
         
        getGPrincipal().imprimirMensaje ("Seleccionar jugador2...");
-       jugador2 = pedirJugador ();
+       jugador2 = pedirJugadorNombre ();
         if (jugador2 != null) {
            cantHoraJ2 = descontarHoraJugador (jugador2);
         } else {
@@ -70,7 +70,7 @@ public class GestionDiaJugar extends Gestion
         
        if (jugador1 != null || jugador2 != null){
           getGPrincipal().imprimirMensaje ("Seleccionar jugador descontar hora bono...");
-          jugador_descontar_bono = pedirJugador ();
+          jugador_descontar_bono = pedirJugadorNombre ();
           bono = pedirBonoJugador (jugador_descontar_bono);
           cantHoraBono = ejecutarDescontarHoraBono (jugador_descontar_bono, bono); 
           getGPrincipal().imprimirMensaje ("Fecha para el dia jugado...");
@@ -95,6 +95,7 @@ public class GestionDiaJugar extends Gestion
         if (cantidad_hora_descontar > 0) {
             jugador.restarHoraContador (cantidad_hora_descontar);
             getGPrincipal().imprimirMensaje ("Hora descontada al contador del jugador "+jugador.getNombre());
+            getGPrincipal().imprimirMensaje (jugador.informarContadorJugadorNegativo());
         } else {
          getGPrincipal().pausaSalir ("No es posible seguir el numero de hora no es valido...");   
        }
@@ -133,6 +134,7 @@ public class GestionDiaJugar extends Gestion
                    
          if (correcto_restar_bono) {
             getGPrincipal().imprimirMensaje ("Hora descontada del bono "+bono.getIdString()+" del jugador "+jug_descontar_hora_bono.getNombre());  
+            getGPrincipal().imprimirMensaje (jug_descontar_hora_bono.informarBonoAgotado(bono));
          } else {
             getGPrincipal().pausaSalir ("Ocurrio un error si no se pudo cargar la hora en el bono...");    
          }
@@ -264,7 +266,7 @@ public class GestionDiaJugar extends Gestion
     private void listaCompletaDiasJugados ()
     {
         getGPrincipal().imprimirMensaje ("  DIAS JUGADOS");
-        getGPrincipal().pintarLista (Inicio.getBaseDatos().getDiaJugado());
+        getGPrincipal().pintarLista (Inicio.getBaseDatos().getListaDiaJugado());
         getGPrincipal().pausaSalir (" Fin de los datos..."); 
     }
     

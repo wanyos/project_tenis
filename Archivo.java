@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.ArrayList;
 
 
 /**
@@ -31,10 +33,70 @@ public abstract class Archivo
     }
 
     
-    /**
+    
+    
+    
+    public static boolean exportarColeccionDatos (Set<Jugador> lista_jugador, List<DiaJugado> lista_dia_jugado, String nombre_archivo)
+    {
+        boolean exportado = false;
+        ObjectOutputStream archivo_exportar = null;
+        Object objeto_exportar = null;
+        
+        if (lista_jugador != null) {
+            objeto_exportar = lista_jugador;
+        } else if (lista_dia_jugado != null) {
+            objeto_exportar = lista_dia_jugado;
+        }
+        
+        try {
+           archivo_exportar = new ObjectOutputStream (new FileOutputStream (nombre_archivo)); 
+           archivo_exportar.writeObject (objeto_exportar);
+           archivo_exportar.close();
+           exportado = true;
+        } catch (Exception e) {
+             System.out.println ("!!!Error "+e.getMessage());  
+        } finally {
+            
+            try {
+               if (archivo_exportar != null) 
+                archivo_exportar.close();
+            } catch (IOException e) {
+                System.out.println ("!!!Error "+e.getMessage());  
+            }
+            
+        }
+        return exportado;
+    }
+    
+    
+    public static Object importarObjeto (String nombre_archivo)
+    {
+        Object importar_objeto = null;
+        ObjectInputStream archivo_importar = null;
+        
+        try {
+            archivo_importar = new ObjectInputStream (new FileInputStream (nombre_archivo));
+            importar_objeto = archivo_importar.readObject ();
+            archivo_importar.close();
+        } catch (Exception e) {
+             System.out.println ("!!!Error "+e.getMessage());  
+        } finally {
+            
+            try {
+                if (archivo_importar != null)
+                  archivo_importar.close();
+            } catch (IOException e) {
+                 System.out.println ("!!!Error "+e.getMessage());  
+            }
+        }
+        return importar_objeto;
+    }
+    
+    
+    /*
      * Salida de datos al archivo
-     */
-    public static boolean exportarDatos (Collection<Object> datos_sistema) 
+     *
+    public static boolean exportarDatos (Collection<Object> datos_sistema)
     {
         boolean exportado = false;
         ObjectOutputStream salida = null;
@@ -42,6 +104,7 @@ public abstract class Archivo
           try{
             salida = new ObjectOutputStream (new FileOutputStream ("ArchivoDatosSistema.txt"));
             salida.writeObject (datos_sistema);
+            salida.close();
             exportado = true;
             
         } catch (FileNotFoundException e) {
@@ -51,8 +114,7 @@ public abstract class Archivo
         }  finally {
      
             try {
-                salida.flush();
-                if (salida != null) salida.close();
+                salida.close();
             } catch (IOException e) {
               System.out.println ("!!!Error"+e.getMessage());  
             }
@@ -64,7 +126,7 @@ public abstract class Archivo
     
     /**
      * Entrada de datos al sistema
-     */
+     *
     public static Collection<Object> importarDatos () 
     {
         Collection<Object> lista_datos = new ArrayList<Object>();
@@ -73,6 +135,7 @@ public abstract class Archivo
         try{
            entrada = new ObjectInputStream (new FileInputStream ("ArchivoDatosSistema.txt"));
            lista_datos = (Collection<Object>) entrada.readObject ();
+           entrada.close();
            
         } catch (FileNotFoundException e) {
             System.out.println (e.getMessage());
@@ -81,6 +144,7 @@ public abstract class Archivo
         } catch (IOException e) {
              System.out.println (e.getMessage());
         } finally {
+    
           try {
               if (entrada != null) entrada.close ();
             } catch (IOException e) {
@@ -89,6 +153,9 @@ public abstract class Archivo
         }
         return lista_datos;
     }
+    */
+    
+    
     
     
     /*

@@ -26,7 +26,7 @@ public class GestionJugador extends Gestion
     public void menuGestionJugador ()
     {
         String [] datos = {"Crear jugador", "Eliminar jugador", "Listar jugadores", "Crear bono para un jugador", "Eliminar bono de un jugador", "Listar bonos jugador",
-                            "Buscar bono", "Buscar jugador"};
+                            "Buscar bono", "Buscar jugador (nombre y apellido)", "Buscar jugador (numero)"};
         String titulo = "  GESTION JUGADOR  ";
         int opcion = menuOpciones (datos, titulo);
         
@@ -38,7 +38,8 @@ public class GestionJugador extends Gestion
            case 5: eliminarBonoJugador (); break;
            case 6: listarBonosJugador(); break;
            case 7: buscarBono(); break;
-           case 8: buscarJugador(); break;
+           case 8: buscarJugadorNombre(); break;
+           case 9: buscarJugadorNumero(); break;
         }
     }
    
@@ -71,11 +72,12 @@ public class GestionJugador extends Gestion
     private void eliminarJugador ()
     {
          boolean eliminar = false;
-         Jugador jugador = pedirJugador();
+         Jugador jugador = pedirJugadorNombre();
        
           if (jugador != null){
             getGPrincipal().pintarObjeto (jugador);
             eliminar = getGPrincipal().preguntarSiNo (" Eliminar jugador? S/N: ");
+            
                  if (eliminar){
                     Inicio.getBaseDatos().eliminarJugador (jugador);
                     getGPrincipal().pausaSalir (" Jugador eliminado..."); 
@@ -108,7 +110,7 @@ public class GestionJugador extends Gestion
     private void crearBonoJugador ()
     {
         String [] datos_bono = {"Nº horas del bono", "Nº-Bono"};
-        Jugador jugador = pedirJugador ();
+        Jugador jugador = pedirJugadorNombre ();
         int horas_bono = 0;
         
         if (jugador != null){
@@ -116,11 +118,13 @@ public class GestionJugador extends Gestion
               datos_leidos = leerArrayDatos (datos_bono);
               horas_bono = Recursos.pasarCadenaInt (datos_leidos.get(0));
               boolean correcto = jugador.comprarBono (horas_bono, datos_leidos.get(1), jugador.getNumSocio());
+              
                if (correcto){
                    getGPrincipal().pausaSalir (" Bono dado de alta la jugador..."); 
                 } else {
                    getGPrincipal().pausaSalir (" !!!Error bono no dado de alta...");  
                 }
+                
         } else {
             getGPrincipal().pausaSalir (" No existe ningun jugador con ese nombre y apellido..."); 
         }
@@ -134,7 +138,7 @@ public class GestionJugador extends Gestion
      */
     private void eliminarBonoJugador ()
     {
-        Jugador jugador = pedirJugador ();
+        Jugador jugador = pedirJugadorNombre ();
         boolean eliminar = false;
         
      if (jugador != null){
@@ -146,6 +150,7 @@ public class GestionJugador extends Gestion
               if (datos_leidos.size() < 2){
                     getGPrincipal().pausaSalir (" Accion cancelada...");   
               } else {
+                  
               Bono bono = jugador.buscarBono (datos_leidos.get(0), datos_leidos.get(1));
                  if (bono != null){
                    eliminar = getGPrincipal().preguntarSiNo (" Eliminar bono? S/N: ");
@@ -153,6 +158,7 @@ public class GestionJugador extends Gestion
                          jugador.eliminarBono (bono);
                          getGPrincipal().pausaSalir (" Bono eliminado...");   
                        }
+                       
                     } else {
                       getGPrincipal().pausaSalir (" El bono no existe o no es correcto...");   
                     }
@@ -166,7 +172,7 @@ public class GestionJugador extends Gestion
     
     private void listarBonosJugador ()
     {
-         Jugador jugador = pedirJugador ();
+         Jugador jugador = pedirJugadorNombre ();
          
          if (jugador != null){
               getGPrincipal().imprimirMensaje ("  BONOS JUGADOR "+jugador.getNombre()+" "+jugador.getApellido());
@@ -185,7 +191,7 @@ public class GestionJugador extends Gestion
     {
       getGPrincipal().imprimirMensaje ("  Buscar un bono por su numero...");
       String num_bono = getGPrincipal().leerDatoUsuario ("Escriba el numero de bono a buscar");
-      Bono bono = Inicio.getBaseDatos().buscarBonoIdNum (num_bono);
+      Bono bono = Inicio.getBaseDatos().buscarBonoNum (num_bono);
       
       if (bono != null) {
            getGPrincipal().pintarObjeto (bono);
@@ -199,10 +205,10 @@ public class GestionJugador extends Gestion
     /**
      * Busca un jugador por nombre y apellido. Si lo encuentra los muestra en pantalla
      */
-    private void buscarJugador ()
+    private void buscarJugadorNombre ()
     {
         getGPrincipal().imprimirMensaje ("  Buscar jugador por nombre y apellido...");
-        Jugador jugador = pedirJugador ();
+        Jugador jugador = pedirJugadorNombre ();
         
         if (jugador != null) {
             getGPrincipal().pintarObjeto (jugador);
@@ -211,6 +217,19 @@ public class GestionJugador extends Gestion
         }
     }
     
+    
+    
+    private void buscarJugadorNumero ()
+    {
+       getGPrincipal().imprimirMensaje ("  Buscar jugador por numero...");
+       Jugador jugador = pedirJugadorNumero ();
+        
+        if (jugador != null) {
+            getGPrincipal().pintarObjeto (jugador);
+        } else {
+           getGPrincipal().pausaSalir (" El jugador no existe o no ha sido encontrado...");    
+        } 
+    }
     
     
     

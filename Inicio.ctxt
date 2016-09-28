@@ -10,5 +10,5 @@ comment3.params=
 comment3.target=void\ menuPrincipal()
 comment3.text=\r\n\ Menu\ principal\ de\ la\ aplicacion\r\n
 comment4.params=
-comment4.target=void\ cargarDatos()
+comment4.target=void\ guardarDatosSistema()
 numComments=5

@@ -1,6 +1,5 @@
 
 
-
 /**
  * Clase principal donde se inicia la aplicacion
  * 
@@ -18,9 +17,12 @@ public class Inicio
     private GestionJugador g_jugador;
     private static BaseDatos base_datos;
     
+    
     public static void main (String [] args)
     {
         base_datos = new BaseDatos();
+        base_datos.importarListaJugador();
+        base_datos.importarListaDiaJugado();
         new Inicio ();
     }
 
@@ -40,7 +42,6 @@ public class Inicio
     public Inicio()
     {
         grafica_principal = new GraficaPrincipal ();
-        this.base_datos.getDatosSistema ();
         menuPrincipal ();
     }
     
@@ -53,6 +54,12 @@ public class Inicio
         //cargarDatos ();
         int opcion = 0;
           grafica_principal.cabeceraInicio ();
+          grafica_principal.imprimirMensaje (" Lista jugadores contador negativo...");
+          grafica_principal.pintarListaJugador (base_datos.listaJugadorContadorNegativo ());
+          
+          grafica_principal.imprimirMensaje (" Lista bonos activos a fecha de hoy...");
+          grafica_principal.pintarLista (base_datos.listaBonoActivos());
+          
         do {
             opcion = grafica_principal.menuInicio ();
             
@@ -63,18 +70,26 @@ public class Inicio
             }
             
             if (opcion == 115 || opcion == 83){
-              boolean exportado = this.base_datos.setDatosSistema ();
-              if (exportado) {
-                  grafica_principal.imprimirMensaje ("  Datos exportados a archivo...");
-                } else {
-                  grafica_principal.imprimirMensaje (" !!!Error datos no exportados a archivo..."); 
-                }
+              guardarDatosSistema ();   
 			  break;
 		  }
         } while (opcion >= 1 || opcion < 3);
     }
 
     
+    
+    private void guardarDatosSistema ()
+    {
+         boolean exportado_lis_jugador = this.base_datos.exportListaJugador ();
+         boolean exportado_lis_dia_jugado = this.base_datos.exportListaDiaJugado ();
+              if (exportado_lis_jugador && exportado_lis_dia_jugado) {
+                  grafica_principal.imprimirMensaje ("  Datos exportados a archivo...");
+                } else {
+                  grafica_principal.imprimirMensaje (" !!!Error datos no exportados a archivo..."); 
+                }
+    }
+    
+    /*
     private void cargarDatos ()
     {
         Jugador juanjo = new Jugador ("juanjo", "romero", "52950980N", "615615529", "12568");
@@ -85,6 +100,6 @@ public class Inicio
         manolo.comprarBono (10, "123", "12590");
         Inicio.getBaseDatos().setJugador (manolo); 
     }
-    
+    */
    
 }

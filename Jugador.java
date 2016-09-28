@@ -99,6 +99,18 @@ public class Jugador implements Serializable
     }
     
     
+     public List<Bono> getListaBono ()
+    {
+        return this.lista_bono;
+    }
+    
+    
+    public void eliminarBono (Bono bono)
+    {
+        lista_bono.remove (bono);
+    }
+    
+    
     /**
      * Aumenta el contador la cantidad de horas del parametro
      * @param cantidad de horas a sumar
@@ -169,6 +181,40 @@ public class Jugador implements Serializable
     
     
     /**
+     * Envia un mensaje de aviso cuando un bono se ha agotado
+     */
+    public String informarBonoAgotado (Bono bono)
+    {
+      String mensaje = null;
+      
+      if (bono.getHoraBono() <= 0) {
+          mensaje = " El bono "+bono.getNumBono()+" del jugador "+bono.getNumJugador()+" se ha acabado...";
+        } else {
+           mensaje = " Al bono "+bono.getNumBono()+" del jugador "+bono.getNumJugador()+" le quedan "+bono.getHoraBono()+" horas";
+        }
+      
+      return mensaje;
+    }
+    
+    
+    /**
+     * Envia un mensaje cuando el contador de un jugador a pasado a valor negativo
+     */
+    public String informarContadorJugadorNegativo ()
+    {
+        String mensaje = null;
+        
+        if (this.getContador() <= 0) {
+            mensaje = " El jugador "+this.getNombre()+" tiene su contador en negativo...";
+        } else {
+            mensaje = " Al jugador "+this.getNombre()+" le quedan "+this.getContador()+" horas";
+        }
+        
+        return mensaje;
+    }
+    
+    
+    /**
      * Le carga las horas de juego al bono que queramos
      * @param bono para el cargo de horas y cantidad de horas
      * @return confirmación de la operación
@@ -186,18 +232,6 @@ public class Jugador implements Serializable
             }
         }
         return correcto;
-    }
-    
-    
-    public List<Bono> getListaBono ()
-    {
-        return this.lista_bono;
-    }
-    
-    
-    public void eliminarBono (Bono bono)
-    {
-        lista_bono.remove (bono);
     }
     
     
