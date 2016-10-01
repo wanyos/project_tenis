@@ -64,6 +64,25 @@ public abstract class Recursos
     }
     
     
+    /**
+     *  Extrae el entero que queramos de la fecha del parámetro. Sea el día, mes o año.
+     *  @param fecha de referencia, enteros de la fecha. Solo buscara el dato que no sea null
+     *  @return entero extraido de la fecha del parámetro, sea el día, mes o año
+     */
+    public static int devolverNumeroFecha (GregorianCalendar fecha, int day, int month, int year)
+    {
+       int entero_extraido = 0;
+       
+       if (day > 0 && month <= 0 && year <= 0) {
+           entero_extraido = fecha.get(GregorianCalendar.MONTH)+1;
+        } else if (day <= 0 && month > 0 && year <= 0) {
+            entero_extraido = fecha.get(GregorianCalendar.DAY_OF_MONTH); 
+        } else if (day <= 0 && month <= 0 && year > 0) {
+            entero_extraido = fecha.get(GregorianCalendar.YEAR); 
+        }
+            
+       return entero_extraido;
+    }
     
     
     
