@@ -33,7 +33,7 @@ public class GraficaPrincipal
     public int menuInicio ()
     {
         int opcion = 0;
-       String [] datos = {"Gestion jugador", "Gestion dia jugar", "Resumen datos"}; 
+       String [] datos = {"Gestion jugador", "Gestion dia jugar", "Resumen datos", "Guardar datos en archivo"}; 
        opcion = devolverMenuPantalla (datos, "  MENU PRINCIPAL");
        return opcion;
     }
@@ -62,21 +62,7 @@ public class GraficaPrincipal
     }
     
     
-    /**
-	 * Cabecera en los menus principales
-	 */
-	private void pintarCabeceraMenu (String titulo)
-	{
-		System.out.println ();
-		System.out.println ();
-		System.out.println ();
-		System.out.println (" *************************************************************************************************");
-		System.out.println (" ******                         "+titulo+"                                                        ");
-		System.out.println (" *************************************************************************************************");
-	}
-	
-	
-	/**
+   /**
 	 * Recibe un string por parámetro que sera lo que imprime en pantalla, recoge el dato ingresado por el usuario
 	 * @param dato a leer
 	 * @return dato leido
@@ -106,52 +92,12 @@ public class GraficaPrincipal
 		    System.out.print(" "+dato_imprimir+": ");
 			cadena = sc.nextLine();
 			valor_leido = Integer.parseInt(cadena);
-		} catch (Exception e){
+		} catch (NumberFormatException e){
 			valor_leido = (int) cadena.charAt(0);
 		}
 		return valor_leido;
 	} 
-	 
-	
-	/**
-	 * Linea de separacion para menus
-	 */
-	private void pintarLinea ()
-	{
-	    System.out.println ("--------------------------------------------------------------------------------------------------");
-	}
-	
-	
-	/**
-	 * Pinta el menu en pantalla con los datos del array
-	 * @return - entero con la opcion elegida por el usuario.
-	 */
-	private int devolverMenuPantalla (String [] datos, String titulo)
-	{
-		int opcion = 0;
-		pintarCabeceraMenu (titulo);
-		pintarMenu (datos);
-		opcion = leerInt ();
-		return opcion;
-	}
-	
-	
-	/**
-	 * Pinta en pantalla el array pasado por parametro
-	 * @param datos que se imprimiran en pantalla
-	 */
-	private void pintarMenu (String [] datos)
-	{
-		pintarLinea();
-		System.out.println (" "+0+" - "+"Pulse 's' 0 'S' para salir");
-		for (int a = 0; a<datos.length; a++){
-			System.out.println (" "+(a+1)+" - "+datos[a]);
-		}
-		System.out.println ();
-		System.out.print (" Seleccione una opcion: ");
-	}
-
-	
+    
 	
 	/**
 	 * Pinta en pantalla los datos de un List por medio su metodo toString
@@ -185,41 +131,7 @@ public class GraficaPrincipal
 		System.out.println (obj.toString());
 		System.out.println ();
 	}
-	
-	
-	/**
-	 * Lee la cadena ingresada por el usuario y la devuelve
-	 * @return - cadena leida
-	 */
-	private String leerString ()
-	{
-		sc = new Scanner (System.in);
-		String leido = null;
-		leido = sc.nextLine ();
-		return leido;
-	}
-	
-	
-	/**
-	 * Lee una cadena y la pasa a entero. Si lo que lee es una letra, devuelve su codigo ascii
-	 * @return - cadena pasada a entero leida por Scanner o su codigo ascii
-	 */
-	private int leerInt ()
-	{
-		sc = new Scanner (System.in);
-		int valor_leido = 0;
-		String cadena = null;
-		
-		try{
-			cadena = sc.nextLine();
-			valor_leido = Integer.parseInt(cadena);
-		} catch (Exception e){
-			valor_leido = (int) cadena.charAt(0);
-		}
-		
-		return valor_leido;
-	}
-	
+    
 	
 	/**
 	 * Hace una pausa con un aviso antes de salir del menu donde se encuentra la aplicacion
@@ -307,7 +219,92 @@ public class GraficaPrincipal
 		
 		return correcto;
 	}
-	
     
-   
+    
+    /**
+	 * Cabecera en los menus principales
+	 */
+	private void pintarCabeceraMenu (String titulo)
+	{
+		System.out.println ();
+		System.out.println ();
+		System.out.println ();
+		System.out.println (" *************************************************************************************************");
+		System.out.println (" ******                         "+titulo+"                                                        ");
+		System.out.println (" *************************************************************************************************");
+	}
+	
+	
+	/**
+	 * Linea de separacion para menus
+	 */
+	private void pintarLinea ()
+	{
+	    System.out.println ("--------------------------------------------------------------------------------------------------");
+	}
+	
+	
+	/**
+	 * Pinta el menu en pantalla con los datos del array
+	 * @return - entero con la opcion elegida por el usuario.
+	 */
+	private int devolverMenuPantalla (String [] datos, String titulo)
+	{
+		int opcion = 0;
+		pintarCabeceraMenu (titulo);
+		pintarMenu (datos);
+		opcion = leerInt ();
+		return opcion;
+	}
+	
+	
+	/**
+	 * Pinta en pantalla el array pasado por parametro
+	 * @param datos que se imprimiran en pantalla
+	 */
+	private void pintarMenu (String [] datos)
+	{
+		pintarLinea();
+		System.out.println (" "+0+" - "+"Pulse 's' 0 'S' para salir");
+		for (int a = 0; a<datos.length; a++){
+			System.out.println (" "+(a+1)+" - "+datos[a]);
+		}
+		System.out.println ();
+		System.out.print (" Seleccione una opcion: ");
+	}
+
+	
+	/**
+	 * Lee la cadena ingresada por el usuario y la devuelve
+	 * @return - cadena leida
+	 */
+	private String leerString ()
+	{
+		sc = new Scanner (System.in);
+		String leido = null;
+		leido = sc.nextLine ();
+		return leido;
+	}
+	
+	
+	/**
+	 * Lee una cadena y la pasa a entero. Si lo que lee es una letra, devuelve su codigo ascii
+	 * @return - cadena pasada a entero leida por Scanner o su codigo ascii
+	 */
+	private int leerInt ()
+	{
+		sc = new Scanner (System.in);
+		int valor_leido = 0;
+		String cadena = null;
+		
+		try{
+			cadena = sc.nextLine();
+			valor_leido = Integer.parseInt(cadena);
+		} catch (Exception e){
+			valor_leido = (int) cadena.charAt(0);
+		}
+		
+		return valor_leido;
+	}
+	
 }

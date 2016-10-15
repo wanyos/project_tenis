@@ -78,6 +78,8 @@ public abstract class Archivo
             archivo_importar = new ObjectInputStream (new FileInputStream (nombre_archivo));
             importar_objeto = archivo_importar.readObject ();
             archivo_importar.close();
+        } catch (FileNotFoundException e) {
+            exportarColeccionDatos(null, null, nombre_archivo);
         } catch (Exception e) {
              System.out.println ("!!!Error "+e.getMessage());  
         } finally {
@@ -92,6 +94,25 @@ public abstract class Archivo
         return importar_objeto;
     }
     
+    
+    private static void crearArchivoSiNoExiste (String nombre_archivo)
+    {
+      ObjectInputStream archivo = null;
+      
+      try {
+          archivo = new ObjectInputStream (new FileInputStream (nombre_archivo));
+        } catch (Exception e) {
+           System.out.println ("!!!Error "+e.getMessage());   
+        } finally {
+          
+            try {
+                if (archivo != null) 
+                    archivo.close();
+            } catch (IOException e) {
+                 System.out.println ("!!!Error "+e.getMessage());  
+            }
+        } 
+    }
     
     /*
      * Salida de datos al archivo

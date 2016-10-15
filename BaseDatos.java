@@ -85,85 +85,35 @@ public class BaseDatos implements Serializable
     }
     
     
-    public boolean importarListaJugador ()
+    @SuppressWarnings("unchecked")
+    public boolean importarListaJugador () throws Exception
     {
         boolean importado = false;
         Object importar_objeto = null;
+   
+        importar_objeto = Archivo.importarObjeto ("lista_jugador.txt");
+          if (importar_objeto instanceof HashSet) {
+            lista_jugador =  (Set<Jugador>) importar_objeto;
+           }
         
-        try{
-           importar_objeto = Archivo.importarObjeto ("lista_jugador.txt");
-               if (importar_objeto instanceof HashSet) {
-                lista_jugador =  (Set<Jugador>) importar_objeto;
-                }
-        } catch (Exception e) {
-            
-        }
         return importado; 
     }
     
     
-     public boolean importarListaDiaJugado ()
+     @SuppressWarnings("unchecked")
+     public boolean importarListaDiaJugado () throws Exception
     {
         boolean importado = false;
         Object importar_objeto = null; 
-        importar_objeto = Archivo.importarObjeto ("lista_dia_jugado.txt");
         
-        if (importar_objeto instanceof ArrayList) {
+        importar_objeto = Archivo.importarObjeto ("lista_dia_jugado.txt");
+          if (importar_objeto instanceof ArrayList) {
             lista_dia_jugado = (List<DiaJugado>) importar_objeto;
-        }
+           }
+       
         return importado; 
     }
     
-    
-    
-    /*
-     * 
-     *Guarda los datos del sistema en un archivo persistente 
-     *
-    public boolean exportDatosSistema ()
-    {
-      boolean exportado = false;
-     
-      Collection<Object> datos_exportar = new ArrayList<Object>();
-      datos_exportar.add (lista_jugador);
-      datos_exportar.add (lista_dia_jugado);
-     
-      exportado = Archivo.exportarDatos (datos_exportar);
-      
-      return exportado;
-    }
-    
-    
-    
-     /**
-      * 
-      *Importa los datos del archivo persistente al sistema. Importara la lista de jugador y la lista dia jugado
-     
-    public boolean importDatosSistema ()
-    {
-       boolean importar = false;
-       Collection<Object> datos_importados = new ArrayList<Object>();
-       datos_importados = Archivo.importarDatos ();
-       
-       if (datos_importados != null) {
-           for (Object obj: datos_importados) {
-               
-              if (obj instanceof HashSet) {
-                   for (Jugador jug: (HashSet<Jugador>) obj) {
-                       lista_jugador.add (jug);
-                    }
-                    
-                } else if (obj instanceof ArrayList) {
-                    for (DiaJugado dia_jug: (ArrayList<DiaJugado>) obj) {
-                        lista_dia_jugado.add (dia_jug);
-                    }
-                }
-            }
-           importar = true;
-        }
-       return importar;
-    }
-    */
     
     /**
      * Busca un jugador por su nombre y apellidos o por su número de socio.

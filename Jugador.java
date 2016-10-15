@@ -142,6 +142,22 @@ public class Jugador implements Serializable
     }
     
     
+    /** 
+     * Devuelve los bonos activos que tenga el jugador. Para que un bono esté activo debe tener más de 0 horas
+     * @return lista de bonos activos.
+     */
+    public List<Bono> getListaBonoActivo ()
+    {
+        List<Bono> lista_bonos_activos = new ArrayList<Bono>();
+        for (Bono bono_aux: this.lista_bono) {
+            if (bono_aux.getHoraBono() > 0) {
+               lista_bonos_activos.add(bono_aux); 
+            }
+        }
+        return lista_bonos_activos;
+    }
+    
+    
     /**
      * Al hacer una compra de un bono se aumentan las horas del contador multiplicadas por 2
      */

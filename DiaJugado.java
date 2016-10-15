@@ -110,7 +110,6 @@ public class DiaJugado implements Serializable
     
     public boolean equals (Object obj)
     {
-        //repasar este metodo porque solo por la fecha es poco para comparar dos objetos
         boolean iguales = false;
         if (obj instanceof DiaJugado){
          DiaJugado d_jug = (DiaJugado) obj; 

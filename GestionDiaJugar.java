@@ -1,5 +1,7 @@
 
 import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Se encarga de toda la gestión de los dias jugados por los jugadores. Crea y elimina los dias que se
@@ -39,153 +41,192 @@ public class GestionDiaJugar extends Gestion
     
     
     /**
-     * Pide los jugadores que van a jugar para comprobar que estan en el sistema. Si no hay ninguno no se podra crear el
-     * día jugado. Se agrega la hora la bono que se diga del jugador. Si no es posible descontar la hora no se creara el día jugado.
-     * Despues de crear el día se aumenta en las horas jugadoas a los jugadores y se descuentan las horas al bono.
+     * Crea un dia de juego entre dos jugadores del sistema o solo uno con otro jugador que no lo es.
+     * Descuenta las horas de juego a cada jugador. Pide el jugador que pagara con su bono las horas de juego.
+     * Se descuentan las horas de juego. Se pide la fecha del partido.
      */
-    private void crearDiaJugado ()
+     private void crearDiaJugado ()
     {
-       GregorianCalendar fecha_juego = null;
-       Bono bono = null;
-       Jugador jugador1 = null, jugador2 = null, jugador_descontar_bono = null;;
-       int cantHoraJ1 = 0, cantHoraJ2 = 0, cantHoraBono = 0;
-       String nombre_anonimo, apellido_anonimo;
-       
-       getGPrincipal().imprimirMensaje ("Seleccionar jugador1...");
-       jugador1 = pedirJugadorNombre ();
-        if (jugador1 != null) {
-           cantHoraJ1 = descontarHoraJugador (jugador1);
-        } else {
-           jugador1 = new Jugador (datos_leidos.get(0), datos_leidos.get(1));
-        }
+        GregorianCalendar fecha_juego = null;
+        Jugador jugador_descontar_bono = null;
+        int cantidad_hora_bono = 0;
+        Bono bono = null;
+        Jugador [] jugadores = new Jugador [2];
+        int [] hora_juego_jugadores = null;
+        boolean validar_horas_descontadas = false;
         
-       getGPrincipal().imprimirMensaje ("Seleccionar jugador2...");
-       jugador2 = pedirJugadorNombre ();
-        if (jugador2 != null) {
-           cantHoraJ2 = descontarHoraJugador (jugador2);
-        } else {
-            jugador2 = new Jugador (datos_leidos.get(0), datos_leidos.get(1));
-        }
-       
-        
-       if (jugador1 != null || jugador2 != null){
-          getGPrincipal().imprimirMensaje ("Seleccionar jugador descontar hora bono...");
-          jugador_descontar_bono = pedirJugadorNombre ();
-          bono = pedirBonoJugador (jugador_descontar_bono);
-          cantHoraBono = ejecutarDescontarHoraBono (jugador_descontar_bono, bono); 
-          getGPrincipal().imprimirMensaje ("Fecha para el dia jugado...");
-          fecha_juego = pedirFecha ();
-          
-          DiaJugado dia_jugado = new DiaJugado (jugador1, jugador2, bono, fecha_juego, cantHoraJ1, cantHoraJ2, cantHoraBono);
-          Inicio.getBaseDatos().setDiaJugado (dia_jugado);
-          getGPrincipal().pausaSalir ("Dia jugado creado correctamente...");
-        } else {
-          getGPrincipal().pausaSalir ("No es posible seguir ningun jugador pertenece al sistema...");
-        }
+       try {
+         jugadores = pedirJugadoresDiaJugar();
+         hora_juego_jugadores = pedirHoraJuegoJugadores (jugadores);
+         
+         jugador_descontar_bono = pedirJugadorDescontarBono();   
+         bono = pedirBonoJugador (jugador_descontar_bono);
+         cantidad_hora_bono = pedirHoraDescontarBono ();  
+         
+         getGPrincipal().imprimirMensaje ("Fecha para el dia jugado...");
+         fecha_juego = pedirFecha ();
+         
+         DiaJugado dia_jugado = new DiaJugado (jugadores[0], jugadores[1], bono, fecha_juego, hora_juego_jugadores[0], hora_juego_jugadores[1], cantidad_hora_bono);
+         Inicio.getBaseDatos().setDiaJugado (dia_jugado);
+         
+         descontarHorasJugadores (hora_juego_jugadores, jugadores);
+         descontarHoraBono (jugador_descontar_bono, bono, cantidad_hora_bono);  
+         getGPrincipal().pausaSalir ("Dia jugado creado correctamente...");
+         
+       } catch (ExcepcionPropia e) {
+         getGPrincipal().pausaSalir (e.getMessage());
+       } catch (NullPointerException e) {
+          getGPrincipal().pausaSalir ("!!! Error, jugador o bono incorrecto...");   
+       } catch (ArrayIndexOutOfBoundsException e) {
+          getGPrincipal().pausaSalir ("!!!Error, los jugadores no son correctos (array fuera de los limites)...");    
+       }
     }
     
+    
+    /**
+     * Pide los jugadores que van a jugar para comprobar que estan en el sistema. Si no hay ninguno no se podra crear el
+     * día jugado. Si existe uno de ellos el otro sera un jugador externo al sistema y se crea un jugador auxiliar.
+     */
+    private Jugador[] pedirJugadoresDiaJugar ()
+    {
+      Jugador [] jugadores = new Jugador [2];
+      Jugador jugador1 = null, jugador2 = null;
+      
+       getGPrincipal().imprimirMensaje ("Seleccionar jugador1...");
+       jugador1 = pedirJugadorNombre();
+     
+       getGPrincipal().imprimirMensaje ("Seleccionar jugador2...");
+        jugador2 = pedirJugadorNombre();
+       
+       if (jugador1 == null && jugador2 == null) {
+              jugadores = null;
+        } else {
+             if (jugador1 != null && jugador2 == null) {
+                   jugador2 = new Jugador (datos_leidos.get(0), datos_leidos.get(1));
+            
+              } else if (jugador1 == null && jugador2 != null) {
+                   jugador1 = new Jugador (datos_leidos.get(0), datos_leidos.get(1));
+              }
+           jugadores[0] = jugador1;
+           jugadores[1] = jugador2;
+        }
+        return jugadores;
+    }
+    
+    
+    /**
+     * Pide las horas que jugaran cada jugador
+     * @return array con dos elementos que seran las horas correspondientes a descontar a cada jugador
+     */
+    private int [] pedirHoraJuegoJugadores (Jugador [] jugadores) throws ExcepcionPropia
+    {
+       int [] horas_juego_jugadores = new int [2];
+       horas_juego_jugadores [0] = getGPrincipal().leerInt ("Numero de horas a descontar a "+jugadores[0].getNombre()+"");
+       horas_juego_jugadores [1] = getGPrincipal().leerInt ("Numero de horas a descontar a "+jugadores[1].getNombre()+"");
+       
+       return horas_juego_jugadores;
+    }
+    
+    
+    /**
+     * Descuenta las horas de juego a cada jugador en sua contador personal
+     */
+    private void descontarHorasJugadores (int [] horas_juego_jugadores, Jugador [] jugadores) throws ExcepcionPropia
+    {
+         descontarHoraJugador (horas_juego_jugadores[0], jugadores[0]);
+         descontarHoraJugador (horas_juego_jugadores[1], jugadores[1]);
+    }
+    
+    
+    /**
+     * Jugador que se le descontara la hora o las horas de algún bono que tenga activo
+     * @return jugador que pagara la hora de su bono
+     */
+    private Jugador pedirJugadorDescontarBono ()
+    {
+        Jugador jugador_descontar_bono = null;
+        boolean repetir = false;
+        
+        do{
+        getGPrincipal().imprimirMensaje ("Seleccionar jugador descontar hora bono...");
+        jugador_descontar_bono = pedirJugadorNombre();
+        
+         if (jugador_descontar_bono == null) {
+              repetir = getGPrincipal().preguntarSiNo ("El jugador no es correcto o no existe, volver a intentar S/N: ");
+            }
+        
+        } while (repetir && jugador_descontar_bono == null);
+        
+        return jugador_descontar_bono;
+    }
+   
     
     /**
      * Descuenta la hora o las horas que se quieran aplicar a un jugador
      * @param jugador del sistema
      */
-    private int descontarHoraJugador (Jugador jugador)
+    private void descontarHoraJugador (int cantidad_hora_descontar, Jugador jugador) throws ExcepcionPropia
     {
-        int cantidad_hora_descontar = getGPrincipal().leerInt ("Numero de horas a descontar a "+jugador.getNombre()+"");
-        if (cantidad_hora_descontar > 0) {
+        if (cantidad_hora_descontar > 0 && cantidad_hora_descontar <= 2) {
             jugador.restarHoraContador (cantidad_hora_descontar);
-            getGPrincipal().imprimirMensaje ("Hora descontada al contador del jugador "+jugador.getNombre());
             getGPrincipal().imprimirMensaje (jugador.informarContadorJugadorNegativo());
         } else {
-         getGPrincipal().pausaSalir ("No es posible seguir el numero de hora no es valido...");   
-       }
+            throw new ExcepcionPropia ("!!!Error, el valor maximo de horas a descontar a un jugador es 2 horas...");
+        }
+    }
+    
+    
+    private void descontarHoraBono (Jugador jug_descontar_hora_bono, Bono bono, int cantidad_hora_descontar) 
+    { 
+       boolean correcto_restar_bono = jug_descontar_hora_bono.restarHoraBono (bono, cantidad_hora_descontar);
+            if (correcto_restar_bono) {
+               getGPrincipal().imprimirMensaje (jug_descontar_hora_bono.informarBonoAgotado(bono));
+            }
+        
+    }
+    
+    
+    private int pedirHoraDescontarBono () throws ExcepcionPropia
+    {
+       int cantidad_hora_descontar = getGPrincipal().leerInt ("Numero de horas a descontar del bono"); 
+          if (cantidad_hora_descontar > 0 && cantidad_hora_descontar <= 2) {
+        } else {
+          throw new ExcepcionPropia ("!!!Error, el valor maximo de horas de un bono es 2 horas...");   
+        }
        return cantidad_hora_descontar;
     }
     
     
     /**
-     * Pedir jugador que se le descontara la hora de juego. Si el jugador no existe no es posible seguir. Si no tienes horas
-     * suficientes no se podra seguir. Si todo correcto se descuenta la hora de juego y se guarda el día de juego
+     * Pide el jugador que se le descontara la hora de juego. Despues un bono de los que ese jugador tenga activo.
+     * Si el bono no está activo devolvera null.
      */
     private Bono pedirBonoJugador (Jugador jugador_descontar_bono)
     {
         Bono bono = null;
-
-         if (jugador_descontar_bono != null) {
-              getGPrincipal().pintarLista (jugador_descontar_bono.getListaBono());
-              bono = buscarBonoJugador (jugador_descontar_bono);
-              
-                 if (bono == null || bono.getHoraBono() < 0) {
-                     getGPrincipal().pausaSalir ("No es posible seguir el bono no tiene sufientes horas o no existe...");  
-                 } 
-                 
-            } else {
-               getGPrincipal().pausaSalir ("No es posible seguir el jugador no existe o no es correcto...");  
-            }
-         return bono;
-    }
-    
-    
-    private int ejecutarDescontarHoraBono (Jugador jug_descontar_hora_bono, Bono bono)
-    {
-       int hora_descontada = 0;
-       hora_descontada = confirmarDescontarHoraBono (bono);
-       boolean correcto_restar_bono = jug_descontar_hora_bono.restarHoraBono (bono, hora_descontada);
-                   
-         if (correcto_restar_bono) {
-            getGPrincipal().imprimirMensaje ("Hora descontada del bono "+bono.getIdString()+" del jugador "+jug_descontar_hora_bono.getNombre());  
-            getGPrincipal().imprimirMensaje (jug_descontar_hora_bono.informarBonoAgotado(bono));
-         } else {
-            getGPrincipal().pausaSalir ("Ocurrio un error si no se pudo cargar la hora en el bono...");    
-         }
-       return hora_descontada;
-    }
-    
-    
-    /**
-     * Pedir al usuario que seleccione un id de bono y su numero para buscar un bono de un jugador. Si el bono no tiene horas disponibles se
-     * devuelve el bono nulo.
-     * @param Jugador que se debe buscar sus bonos
-     * @return bono del jugador
-     */
-    private Bono buscarBonoJugador (Jugador jug_descontar_hora)
-    {
-       Bono bono = null;
-       String id_bono = getGPrincipal().leerDatoUsuario ("Escriba id del bono que quiera descontar la hora");
-        bono =  jug_descontar_hora.buscarBono (id_bono, null);
-         
-         if (bono.getHoraBono() <= 0){
-             bono = null;
-            }
-  
-         return bono;
-    }
-    
-    
-    /**
-     * Confirma si descontar horas del bono se puede llevar a cabo y cuantas horas se van a descontar
-     * @param bono del que se descontaran las horas en casa de que exista sufiente crédito de horas
-     * @return número de horas a descontar
-     */
-    private int confirmarDescontarHoraBono (Bono bono)
-    {
-        int cantidad_hora = getGPrincipal().leerInt ("Numero de horas a descontar del bono");
+        boolean repetir = false;
         
-         if (cantidad_hora > 0) {
-               boolean respuesta = getGPrincipal().preguntarSiNo ("Descontar "+cantidad_hora+" hora del bono S/N: ");
-               
-                     if (!respuesta) {
-                           getGPrincipal().pausaSalir ("Accion cancelada...");    
-                           cantidad_hora = 0; 
-                        } 
-                               
-            } else {
-                 getGPrincipal().pausaSalir ("El valor de hora descontar no es correcto...");    
-                 cantidad_hora = 0;
+           getGPrincipal().pintarLista (jugador_descontar_bono.getListaBonoActivo());
+        do {
+            String id_bono = getGPrincipal().leerDatoUsuario ("Escriba id del bono que quiera descontar la hora");
+            bono = jugador_descontar_bono.buscarBono (id_bono, null);
+            if (bono == null) {
+               repetir = getGPrincipal().preguntarSiNo ("Error el bono no es correcto, volver a intentar S/N: "); 
             }
-        return cantidad_hora;
+        } while (repetir && bono == null);
+        
+        if (bono == null) {
+            throw new NullPointerException ();
+        }
+              
+         return bono;
     }
     
+    
+    
+    
+    
+   
     
     /**
      * Elimina un día que se habia creado para jugar y no se ha jugado. Se devulven las horas a los jugadores y al bono que se
@@ -198,7 +239,7 @@ public class GestionDiaJugar extends Gestion
    
         dia_jugado = Inicio.getBaseDatos().buscarDiaJugado (id_dia_jugado);
         
-        if (dia_jugado != null) {
+       try {
            Jugador jugador1 = dia_jugado.getJugador1 ();
            int cant_hora_jugador1 = dia_jugado.getCantHoraJ1 ();
            jugador1.setContador (cant_hora_jugador1);
@@ -213,7 +254,8 @@ public class GestionDiaJugar extends Gestion
            
            Inicio.getBaseDatos().eliminarDiaJugado (dia_jugado);
            getGPrincipal().pausaSalir ("Dia jugado eliminado y valores restablecidos...");    
-        } else {
+           
+        } catch (NullPointerException e) {
            getGPrincipal().pausaSalir ("El dia jugado no existe o no es correcto...");  
         }
     }

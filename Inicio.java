@@ -1,7 +1,8 @@
 
 
 /**
- * Clase principal donde se inicia la aplicacion
+ * Inicia la aplicación con el menú de opciones.
+ *  Activa de los bonos activos y jugadores con saldo negativo.
  * 
  * @author (Juan José Romero) 
  * @version (1.0  25/08/2016)
@@ -21,8 +22,14 @@ public class Inicio
     public static void main (String [] args)
     {
         base_datos = new BaseDatos();
-        base_datos.importarListaJugador();
-        base_datos.importarListaDiaJugado();
+        
+        try {
+          base_datos.importarListaJugador();
+          base_datos.importarListaDiaJugado();
+        } catch (Exception e) {
+         System.out.println (" !!!Error al importar los archivos del sistema... ");
+        }
+       
         new Inicio ();
     }
 
@@ -51,7 +58,6 @@ public class Inicio
      */
     private void menuPrincipal ()
     {
-        //cargarDatos ();
         int opcion = 0;
           grafica_principal.cabeceraInicio ();
           grafica_principal.imprimirMensaje (" Lista jugadores contador negativo...");
@@ -67,6 +73,7 @@ public class Inicio
                case 1: new GestionJugador (); break;
                case 2: new GestionDiaJugar (); break;
                case 3: new GestionResumen (); break;
+               case 4: guardarDatosSistema(); break;
             }
             
             if (opcion == 115 || opcion == 83){
@@ -89,17 +96,5 @@ public class Inicio
                 }
     }
     
-    /*
-    private void cargarDatos ()
-    {
-        Jugador juanjo = new Jugador ("juanjo", "romero", "52950980N", "615615529", "12568");
-        juanjo.comprarBono (10, "123456", "12568");
-        Inicio.getBaseDatos().setJugador (juanjo);
-         
-        Jugador manolo = new Jugador ("manolo", "vega", "51930680N", "612617529", "12570");
-        manolo.comprarBono (10, "123", "12590");
-        Inicio.getBaseDatos().setJugador (manolo); 
-    }
-    */
    
 }
