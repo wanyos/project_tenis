@@ -28,15 +28,22 @@ public class GestionDiaJugar extends Gestion
      */
     public void menuGestionDiaJugar ()
     {
-        String [] datos = {"Crear dia jugado", "Eliminar dia jugado", "Listar dias de juego"};
-        String titulo = "  GESTION DIA JUGAR";
-        int opcion = menuOpciones (datos, titulo);
+        int opcion = 0;
+        do {
+          String [] datos = {"Crear dia jugado", "Eliminar dia jugado", "Listar dias de juego"};
+          String titulo = "  GESTION DIA JUGAR";
+          opcion = menuOpciones (datos, titulo);
         
-        switch (opcion) {
+          switch (opcion) {
             case 1: crearDiaJugado(); break;
             case 2: eliminarDiaJugado(); break;
             case 3: listarDiaJugado(); break;
-        }
+           }
+           
+          if (opcion == 115 || opcion == 83){
+			  break;
+		     }
+       } while (opcion >= 1 || opcion <= 3);
     }
     
     
@@ -61,12 +68,13 @@ public class GestionDiaJugar extends Gestion
          
          jugador_descontar_bono = pedirJugadorDescontarBono();   
          bono = pedirBonoJugador (jugador_descontar_bono);
+         Bono bono_copia = (Bono) bono.clone();
          cantidad_hora_bono = pedirHoraDescontarBono ();  
          
          getGPrincipal().imprimirMensaje ("Fecha para el dia jugado...");
          fecha_juego = pedirFecha ();
          
-         DiaJugado dia_jugado = new DiaJugado (jugadores[0], jugadores[1], bono, fecha_juego, hora_juego_jugadores[0], hora_juego_jugadores[1], cantidad_hora_bono);
+         DiaJugado dia_jugado = new DiaJugado (jugadores[0], jugadores[1], bono_copia, fecha_juego, hora_juego_jugadores[0], hora_juego_jugadores[1], cantidad_hora_bono);
          Inicio.getBaseDatos().setDiaJugado (dia_jugado);
          
          descontarHorasJugadores (hora_juego_jugadores, jugadores);
@@ -96,7 +104,7 @@ public class GestionDiaJugar extends Gestion
        jugador1 = pedirJugadorNombre();
      
        getGPrincipal().imprimirMensaje ("Seleccionar jugador2...");
-        jugador2 = pedirJugadorNombre();
+       jugador2 = pedirJugadorNombre();
        
        if (jugador1 == null && jugador2 == null) {
               jugadores = null;
@@ -218,15 +226,9 @@ public class GestionDiaJugar extends Gestion
         if (bono == null) {
             throw new NullPointerException ();
         }
-              
          return bono;
     }
     
-    
-    
-    
-    
-   
     
     /**
      * Elimina un día que se habia creado para jugar y no se ha jugado. Se devulven las horas a los jugadores y al bono que se
@@ -240,24 +242,42 @@ public class GestionDiaJugar extends Gestion
         dia_jugado = Inicio.getBaseDatos().buscarDiaJugado (id_dia_jugado);
         
        try {
-           Jugador jugador1 = dia_jugado.getJugador1 ();
-           int cant_hora_jugador1 = dia_jugado.getCantHoraJ1 ();
-           jugador1.setContador (cant_hora_jugador1);
-           
-           Jugador jugador2 = dia_jugado.getJugador2 ();
-           int cant_hora_jugador2 = dia_jugado.getCantHoraJ2 ();
-           jugador2.setContador (cant_hora_jugador2);
-           
-           Bono bono_jugador = dia_jugado.getBonoJugado ();
-           int cant_hora_bono = dia_jugado.getCantHoraBono ();
-           bono_jugador.setHora (cant_hora_bono);
-           
+           devolverHoraJugador (dia_jugado);
+           devolverHoraBono (dia_jugado);
            Inicio.getBaseDatos().eliminarDiaJugado (dia_jugado);
            getGPrincipal().pausaSalir ("Dia jugado eliminado y valores restablecidos...");    
            
         } catch (NullPointerException e) {
            getGPrincipal().pausaSalir ("El dia jugado no existe o no es correcto...");  
         }
+    }
+    
+    
+    /**
+     * Antes de eliminar un día jugado se deben devolver las horas de juego a sus jugadores y las horas
+     * de juego al bono donde se cargo el día de juego
+     */
+    private void devolverHoraJugador (DiaJugado dia_jugado) 
+    {
+		boolean contador_jugador1_modificado = false, contador_jugador2_modificado = false;
+		
+        Jugador jugador1 = dia_jugado.getJugador1 ();
+        int cant_hora_jugador1 = dia_jugado.getCantHoraJ1 ();
+		contador_jugador1_modificado = Inicio.getBaseDatos().modificarContadorJugador (jugador1, cant_hora_jugador1);
+        
+        Jugador jugador2 = dia_jugado.getJugador2 ();
+        int cant_hora_jugador2 = dia_jugado.getCantHoraJ2 ();
+        contador_jugador2_modificado = Inicio.getBaseDatos().modificarContadorJugador (jugador2, cant_hora_jugador1);
+        
+    }
+    
+    
+    private void devolverHoraBono (DiaJugado dia_jugado)
+    {
+        boolean jugador_bono_modificado = false;
+        Bono bono_jugador = dia_jugado.getBonoJugado ();
+        int cant_hora_bono = dia_jugado.getCantHoraBono ();
+        jugador_bono_modificado = Inicio.getBaseDatos().modificarContadorBonoJugador (bono_jugador, cant_hora_bono);
     }
     
     

@@ -28,11 +28,12 @@ public class GestionResumen extends Gestion
      */
     public void menuGestionResumen ()
     {
-        //intentar realizar un menu en todas las gestiones y que se quede en este menu despues de realizar una acción
+       int opcion = 0;
+       do {
         String [] datos = {"Mostrar datos de un dia", "Buscar datos de un mes", "Buscar datos de un anyo", "Dias jugados de un jugador"};
         String titulo = "  GESTION RESUMEN DATOS";
         String salir = null;
-        int opcion = menuOpciones (datos, titulo);
+        opcion = menuOpciones (datos, titulo);
         boolean dia = false, mes = false, anyo = false;
        
          switch (opcion) {
@@ -41,6 +42,12 @@ public class GestionResumen extends Gestion
            case 3: anyo = true; datosDia (dia, mes, anyo); break;
            case 4: datosJugador (); break;
           }
+          
+          if (opcion == (int)'s' || opcion == (int)'S'){
+			  break;
+		     }
+          
+        } while (opcion >= 1 || opcion <= 4);
     }
     
     
@@ -79,10 +86,9 @@ public class GestionResumen extends Gestion
         int mes = 0, anyo = 0;
         List<DiaJugado> lista_resumen_jugado_mes = new ArrayList<DiaJugado>();
         getGPrincipal().imprimirMensaje (" Datos de jugador de un mes y anyo...");
-        Jugador jugador = pedirJugadorNombre ();  
         
         try {
-         if (jugador != null) {
+          Jugador jugador = pedirJugadorNombre ();    
           mes = getGPrincipal().leerInt ("Month");
           anyo = getGPrincipal().leerInt ("Year"); 
           getGPrincipal().imprimirMensaje (" Datos del mes "+mes+"/"+anyo);
@@ -95,10 +101,8 @@ public class GestionResumen extends Gestion
           totalBonoGastadoAnyo (anyo, jugador);
           
           getGPrincipal().pausaSalir (" Fin de los datos...");
-        } else {
-          getGPrincipal().pausaSalir (" Jugador no encontrado o no existe... ");    
-        }
-       
+        } catch (NullPointerException e){
+           getGPrincipal().pausaSalir (" !!!El jugador no ha sido encontrado... "); 
         }  catch (Exception e) {
            getGPrincipal().pausaSalir (" !!!Se ha producido un error inesperado... ");
         }
@@ -125,6 +129,7 @@ public class GestionResumen extends Gestion
           }
          getGPrincipal().imprimirMensaje (" Horas total del mes: "+total_horas_jugadas_mes);
          mediaHoraMes (lista_resumen_jugado, total_horas_jugadas_mes);
+         
        } catch (Exception e) {
           getGPrincipal().pausaSalir (" !!!Error, no existen datos...");
        }
@@ -175,7 +180,7 @@ public class GestionResumen extends Gestion
        DecimalFormat df = new DecimalFormat("0.00"); 
        float resultado = (float) total_horas_anyo/365;
        
-        getGPrincipal().imprimirMensaje (" Media de horas jugadas al anyo: "+df.format(resultado));  
+       getGPrincipal().imprimirMensaje (" Media de horas jugadas al anyo: "+df.format(resultado));  
     }
     
     

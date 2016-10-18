@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @version (1.0  25/08/2016)
  */
 
-public class Jugador implements Serializable
+public class Jugador implements Serializable, Cloneable
 {
     private List<Bono> lista_bono = new ArrayList<Bono>();
     
@@ -208,7 +208,6 @@ public class Jugador implements Serializable
         } else {
            mensaje = " Al bono "+bono.getNumBono()+" del jugador "+bono.getNumJugador()+" le quedan "+bono.getHoraBono()+" horas";
         }
-      
       return mensaje;
     }
     
@@ -225,7 +224,6 @@ public class Jugador implements Serializable
         } else {
             mensaje = " Al jugador "+this.getNombre()+" le quedan "+this.getContador()+" horas";
         }
-        
         return mensaje;
     }
     
@@ -279,7 +277,26 @@ public class Jugador implements Serializable
     }
     
     
+    public Object clone () 
+    {
+        Object obj = null;
+      try {
+        obj = (Jugador) super.clone();
+      } catch (CloneNotSupportedException e) {
+        System.out.println (e.getMessage());  
+      }
+        return obj;
+        
+    }
     
+    /*
+    public Jugador clonarJugador ()
+    {
+       Jugador jugador_copia = null;
+       jugador_copia = SerializationUtils.clone (this);
+       return jugador_copia;
+    }
+    */
     
     
     

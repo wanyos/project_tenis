@@ -31,124 +31,27 @@ public class BaseDatos implements Serializable
     }
 
     
-    /**
-     * Se guardan en la lista todos los jugadores con el contador en negativo.
-     * @return lista de jugadores con el contador en negativo.
-     */
-    public Set<Jugador> listaJugadorContadorNegativo ()
+     public int getNuevoIdJugador ()
     {
-       Set<Jugador> lista_jugador_negativo = new HashSet<Jugador>(); 
-       
-       for (Jugador jugador_aux: lista_jugador) {
-           if (jugador_aux.getContador() <= 0) {
-               lista_jugador_negativo.add (jugador_aux);
+        int ultimo_id = 0;
+        for (Jugador jugador_aux: this.lista_jugador) {
+            if (ultimo_id < jugador_aux.getId()) {
+               ultimo_id = jugador_aux.getId(); 
             }
         }
-       
-       return lista_jugador_negativo;
-    }
-    
-    
-    /**
-     * Lista de bonos activos del sistema.
-     * @return lista de todos los bonos activos en el momento de la consulta
-     */
-    public List<Bono> listaBonoActivos ()
-    {
-        List<Bono> lista_bono_activo = new ArrayList<Bono>();
-        
-        for (Jugador jugador_aux: lista_jugador) {
-            for (Bono bono_aux: jugador_aux.getListaBono()) {
-              if (bono_aux.getHoraBono() > 0) {
-                  lista_bono_activo.add (bono_aux);
-                }
-            }
-        }
-        
-        return lista_bono_activo;
-    }
-    
-    
-    public boolean exportListaJugador ()
-    {
-        boolean exportado = false;
-        exportado = Archivo.exportarColeccionDatos (this.lista_jugador, null, "lista_jugador.txt");
-        return exportado;
-    }
-    
-    
-     public boolean exportListaDiaJugado ()
-    {
-        boolean exportado = false;
-        exportado = Archivo.exportarColeccionDatos (null, this.lista_dia_jugado, "lista_dia_jugado.txt");
-        return exportado;
-    }
-    
-    
-    @SuppressWarnings("unchecked")
-    public boolean importarListaJugador () throws Exception
-    {
-        boolean importado = false;
-        Object importar_objeto = null;
-   
-        importar_objeto = Archivo.importarObjeto ("lista_jugador.txt");
-          if (importar_objeto instanceof HashSet) {
-            lista_jugador =  (Set<Jugador>) importar_objeto;
-           }
-        
-        return importado; 
-    }
-    
-    
-     @SuppressWarnings("unchecked")
-     public boolean importarListaDiaJugado () throws Exception
-    {
-        boolean importado = false;
-        Object importar_objeto = null; 
-        
-        importar_objeto = Archivo.importarObjeto ("lista_dia_jugado.txt");
-          if (importar_objeto instanceof ArrayList) {
-            lista_dia_jugado = (List<DiaJugado>) importar_objeto;
-           }
-       
-        return importado; 
-    }
-    
-    
-    /**
-     * Busca un jugador por su nombre y apellidos o por su número de socio.
-     * @param nombre y apellido del jugador que debe buscar
-     * @return si encuentra un jugador con ese nombre y apellido
-     */
-   public Jugador buscaJugador (String nombre, String apellido, String num_socio)
-    {
-       Jugador jugador = null;
-       boolean encontrado = false;
-       Iterator<Jugador> it = lista_jugador.iterator();
-       
-       while (it.hasNext() && !encontrado) {
-           Jugador aux = (Jugador) it.next();
-            if (num_socio == null && aux.getNombre().equals(nombre) && (aux.getApellido().equals(apellido))) {
-                jugador = aux;
-                encontrado = true;
-            } else if (nombre == null && apellido == null && aux.getNumSocio().equals(num_socio)) {
-                jugador = aux;
-                encontrado = true;
-            }
-        }
-       return jugador;
-    }
-    
-    
-    public int getNuevoIdJugador ()
-    {
-        return lista_jugador.size()+1;
+        return ultimo_id+1;
     }
     
     
     public int getNuevoIdDiaJugado ()
     {
-        return lista_dia_jugado.size()+1;
+       int ultimo_id = 0; 
+       for (DiaJugado dia_aux: this.lista_dia_jugado) {
+           if (ultimo_id < dia_aux.getId()) {
+               ultimo_id = dia_aux.getId();
+            }
+        }
+       return ultimo_id+1;
     }
     
     
@@ -186,6 +89,152 @@ public class BaseDatos implements Serializable
     {
         lista_dia_jugado.remove (d_jugado);
     }
+    
+    
+    /**
+     * Se guardan en la lista todos los jugadores con el contador en negativo.
+     * @return lista de jugadores con el contador en negativo.
+     */
+    public Set<Jugador> listaJugadorContadorNegativo ()
+    {
+       Set<Jugador> lista_jugador_negativo = new HashSet<Jugador>(); 
+       
+       for (Jugador jugador_aux: lista_jugador) {
+           if (jugador_aux.getContador() <= 0) {
+               lista_jugador_negativo.add (jugador_aux);
+            }
+        }
+       return lista_jugador_negativo;
+    }
+    
+    
+    /**
+     * Lista de bonos activos del sistema.
+     * @return lista de todos los bonos activos en el momento de la consulta
+     */
+    public List<Bono> listaBonoActivos ()
+    {
+        List<Bono> lista_bono_activo = new ArrayList<Bono>();
+        
+        for (Jugador jugador_aux: lista_jugador) {
+            for (Bono bono_aux: jugador_aux.getListaBono()) {
+              if (bono_aux.getHoraBono() > 0) {
+                  lista_bono_activo.add (bono_aux);
+                }
+            }
+        }
+        return lista_bono_activo;
+    }
+    
+    
+    public boolean exportListaJugador ()
+    {
+        boolean exportado = false;
+        exportado = Archivo.exportarColeccionDatos (this.lista_jugador, null, "lista_jugador.txt");
+        return exportado;
+    }
+    
+    
+     public boolean exportListaDiaJugado ()
+    {
+        boolean exportado = false;
+        exportado = Archivo.exportarColeccionDatos (null, this.lista_dia_jugado, "lista_dia_jugado.txt");
+        return exportado;
+    }
+    
+    
+    @SuppressWarnings("unchecked")
+    public boolean importarListaJugador () throws Exception
+    {
+        boolean importado = false;
+        Object importar_objeto = null;
+   
+        importar_objeto = Archivo.importarObjeto ("lista_jugador.txt");
+          if (importar_objeto instanceof HashSet) {
+            lista_jugador =  (Set<Jugador>) importar_objeto;
+           }
+        return importado; 
+    }
+    
+    
+     @SuppressWarnings("unchecked")
+     public boolean importarListaDiaJugado () throws Exception
+    {
+        boolean importado = false;
+        Object importar_objeto = null; 
+        
+        importar_objeto = Archivo.importarObjeto ("lista_dia_jugado.txt");
+          if (importar_objeto instanceof ArrayList) {
+            lista_dia_jugado = (List<DiaJugado>) importar_objeto;
+           }
+        return importado; 
+    }
+    
+    
+    /**
+     * Busca un jugador por su nombre y apellidos o por su número de socio.
+     * @param nombre y apellido del jugador que debe buscar
+     * @return si encuentra un jugador con ese nombre y apellido
+     */
+   public Jugador buscaJugador (String nombre, String apellido, String num_socio)
+    {
+       Jugador jugador = null;
+       boolean encontrado = false;
+       Iterator<Jugador> it = lista_jugador.iterator();
+       
+       while (it.hasNext() && !encontrado) {
+           Jugador aux = (Jugador) it.next();
+            if (num_socio == null && aux.getNombre().equals(nombre) && (aux.getApellido().equals(apellido))) {
+                jugador = aux;
+                encontrado = true;
+            } else if (nombre == null && apellido == null && aux.getNumSocio().equals(num_socio)) {
+                jugador = aux;
+                encontrado = true;
+            }
+        }
+       return jugador;
+    }
+    
+    
+   public boolean modificarContadorJugador (Jugador jugador, int hora_jugado)
+   {
+     boolean modificado = false, encontrado = false;
+     
+     Iterator<Jugador> it = this.lista_jugador.iterator();
+     
+     while (it.hasNext() && !encontrado) {
+            Jugador jugador_aux = it.next();
+           if (jugador.equals(jugador_aux)) {
+				jugador_aux.setContador (hora_jugado);
+				modificado = true;
+            }
+        }
+     return modificado;
+   }
+    
+   
+   public boolean modificarContadorBonoJugador (Bono bono_jugador, int cantidad_horas)
+   {
+    boolean modificado = false, encontrado = false;
+    
+    for (Jugador jugador_aux: this.lista_jugador) {
+      if (jugador_aux.getNumSocio().equals(bono_jugador.getNumJugador())) {
+          
+          Iterator<Bono> it =  jugador_aux.getListaBono().iterator();
+          
+          while (it.hasNext() && !encontrado) {
+              Bono bono_aux = it.next();
+              if (bono_aux.equals(bono_jugador)) {
+                  bono_aux.setHora (cantidad_horas);
+                  encontrado = true;
+                  modificado = true;
+                }
+            }
+        }
+    }
+    return modificado;
+   }
+   
     
     
     /**

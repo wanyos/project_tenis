@@ -112,9 +112,9 @@ public class DiaJugado implements Serializable
     {
         boolean iguales = false;
         if (obj instanceof DiaJugado){
-         DiaJugado d_jug = (DiaJugado) obj; 
+         DiaJugado dia_jugado = (DiaJugado) obj; 
            
-           if (d_jug.getDiaJugado() == getDiaJugado() && d_jug.getMesJugado() == getMesJugado() && d_jug.getAnyoJugado() == getAnyoJugado()){
+           if (dia_jugado.getDiaJugado() == getDiaJugado() && dia_jugado.getMesJugado() == getMesJugado() && dia_jugado.getAnyoJugado() == getAnyoJugado() && dia_jugado.getIdString().equals(getIdString())){
                iguales = true;
             } else {
                 iguales = false;

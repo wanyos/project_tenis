@@ -10,7 +10,7 @@ import java.io.Serializable;
  */
 
 
-public class Bono implements Serializable
+public class Bono implements Serializable, Cloneable
 {
     
     private GregorianCalendar fecha_alta;
@@ -101,6 +101,30 @@ public class Bono implements Serializable
     }
     
     
+    public boolean equals (Object obj)
+    {
+       boolean iguales = false;
+       if (obj != null && obj instanceof Bono) {
+           Bono bono = (Bono) obj;
+            if (bono.getNumBono().equals(this.num_bono) && bono.getNumJugador().equals(this.num_jugador)) {
+                iguales = true;
+            }
+        }
+       
+       return iguales;
+    }
+    
+    
+    public Object clone () 
+    {
+       Object obj = null;
+      try{
+       obj = (Bono) super.clone(); 
+      } catch (CloneNotSupportedException e) {
+        System.out.println (e.getMessage());
+      }
+        return obj;
+    }
     
     
     

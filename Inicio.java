@@ -58,7 +58,7 @@ public class Inicio
      */
     private void menuPrincipal ()
     {
-        int opcion = 0;
+          int opcion = 0;
           grafica_principal.cabeceraInicio ();
           grafica_principal.imprimirMensaje (" Lista jugadores contador negativo...");
           grafica_principal.pintarListaJugador (base_datos.listaJugadorContadorNegativo ());
@@ -76,11 +76,11 @@ public class Inicio
                case 4: guardarDatosSistema(); break;
             }
             
-            if (opcion == 115 || opcion == 83){
+            if (opcion == (int)'s' || opcion == (int)'S'){
               guardarDatosSistema ();   
 			  break;
 		  }
-        } while (opcion >= 1 || opcion < 3);
+        } while (opcion >= 1 || opcion <= 4);
     }
 
     
