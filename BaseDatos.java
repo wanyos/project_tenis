@@ -364,6 +364,26 @@ public class BaseDatos implements Serializable
     }
     
     
+    /**
+     * Crea una lista con todos los dias cargados al mismo bono
+     * @param bono con el que se ha jugado
+     * @return todos los dias cargados a ese bono
+     */
+    public List<DiaJugado> diasJugadosBono (Bono bono)
+    {
+        List<DiaJugado> lista_jugado_bono = new ArrayList<DiaJugado>();
+        Iterator<DiaJugado> it = this.lista_dia_jugado.iterator();
+        
+        while (it.hasNext()) {
+           DiaJugado dia_aux = it.next();
+           
+           if (dia_aux.getBonoJugado().equals(bono)) {
+               lista_jugado_bono.add (dia_aux);
+            }
+        }
+        return lista_jugado_bono;
+    }
+    
     
     
     

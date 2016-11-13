@@ -30,7 +30,7 @@ public class GestionResumen extends Gestion
     {
        int opcion = 0;
        do {
-        String [] datos = {"Mostrar datos de un dia", "Buscar datos de un mes", "Buscar datos de un anyo", "Dias jugados de un jugador"};
+        String [] datos = {"Mostrar datos de un dia", "Buscar datos de un mes", "Buscar datos de un anyo", "Dias jugados de un jugador", "Historial de un bono"};
         String titulo = "  GESTION RESUMEN DATOS";
         String salir = null;
         opcion = menuOpciones (datos, titulo);
@@ -41,6 +41,7 @@ public class GestionResumen extends Gestion
            case 2: mes = true; anyo = true; datosDia (dia, mes, anyo); break;
            case 3: anyo = true; datosDia (dia, mes, anyo); break;
            case 4: datosJugador (); break;
+           case 5: historialBono (); break;
           }
           
           if (opcion == (int)'s' || opcion == (int)'S'){
@@ -93,14 +94,15 @@ public class GestionResumen extends Gestion
           anyo = getGPrincipal().leerInt ("Year"); 
           getGPrincipal().imprimirMensaje (" Datos del mes "+mes+"/"+anyo);
           lista_resumen_jugado_mes = Inicio.getBaseDatos().resumenListaJugado (mes, anyo, jugador);
-          getGPrincipal().pintarLista (lista_resumen_jugado_mes); 
           
+          if (!lista_resumen_jugado_mes.isEmpty()) {
+          getGPrincipal().pintarLista (lista_resumen_jugado_mes); 
           totalHorasJugadosMes (lista_resumen_jugado_mes, jugador);
           totalHorasJugadasAnyo (anyo, jugador);
-          totalHorasJugadasAnyo (anyo, jugador);
           totalBonoGastadoAnyo (anyo, jugador);
-          
+        } 
           getGPrincipal().pausaSalir (" Fin de los datos...");
+          
         } catch (NullPointerException e){
            getGPrincipal().pausaSalir (" !!!El jugador no ha sido encontrado... "); 
         }  catch (Exception e) {
@@ -114,11 +116,10 @@ public class GestionResumen extends Gestion
      *  @param lista de los datos de un jugador en un mes y anyo concreto
      *  @return suma total de las horas de ese mes
      */
-    private void totalHorasJugadosMes (List<DiaJugado> lista_resumen_jugado, Jugador jugador)
+    private void totalHorasJugadosMes (List<DiaJugado> lista_resumen_jugado, Jugador jugador) throws NullPointerException
     {
         int total_horas_jugadas_mes = 0;
         
-        try {
           for (DiaJugado dia_aux: lista_resumen_jugado) {
              if (dia_aux.getJugador1().equals(jugador)) {
                 total_horas_jugadas_mes += dia_aux.getCantHoraJ1();
@@ -129,10 +130,6 @@ public class GestionResumen extends Gestion
           }
          getGPrincipal().imprimirMensaje (" Horas total del mes: "+total_horas_jugadas_mes);
          mediaHoraMes (lista_resumen_jugado, total_horas_jugadas_mes);
-         
-       } catch (Exception e) {
-          getGPrincipal().pausaSalir (" !!!Error, no existen datos...");
-       }
     }
     
     
@@ -140,7 +137,7 @@ public class GestionResumen extends Gestion
      *  Media de horas jugadas en un mes.
      *  @return media aritmética de horas jugadas en un mes
      */
-    private void mediaHoraMes (List<DiaJugado> lista_resumen_jugado, int total_horas_jugadas_mes)
+    private void mediaHoraMes (List<DiaJugado> lista_resumen_jugado, int total_horas_jugadas_mes) throws NullPointerException
     {
       GregorianCalendar fecha_jugado = lista_resumen_jugado.get(0).getFechaJugado(); 
       DecimalFormat df = new DecimalFormat("0.00"); 
@@ -200,6 +197,25 @@ public class GestionResumen extends Gestion
         getGPrincipal().imprimirMensaje (" Total bonos gastados anyo "+anyo+": "+total_bonos_gastados_anyo);  
     }
     
+    
+    /** 
+     * Resumen del historial que ha tenido o tiene un bono
+     */
+    private void historialBono ()
+    {
+        List<DiaJugado> lista_cargados_bono = new ArrayList<DiaJugado>();
+       try { 
+        String numero_bono = getGPrincipal().leerDatoUsuario ("Numero de bono");
+        Bono bono = Inicio.getBaseDatos().buscarBonoNum (numero_bono);
+        
+        lista_cargados_bono = Inicio.getBaseDatos().diasJugadosBono (bono);
+        getGPrincipal().pintarLista (lista_cargados_bono); 
+        
+       } catch (NullPointerException e) {
+         getGPrincipal().imprimirMensaje (" Bono no existe o no ha sido encontrado...");      
+       }
+       getGPrincipal().pausaSalir (" Fin de los datos...");
+    }
     
     
     
